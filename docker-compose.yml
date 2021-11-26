@@ -3,7 +3,7 @@ services:
   app:
     build: .
     volumes:
-      - ./programCode:/code/programCode
+      - ./src:/code/src
     ports:
       - 8080:8080
     depends_on:
@@ -20,5 +20,6 @@ services:
       - 5432:5432
     volumes:
       - ./db_init/:/docker-entrypoint-initdb.d/
-      - ./store:/var/lib/postgresql/data
-        
+      - pg_data:/var/lib/postgresql/data
+volumes:
+  pg_data:        
