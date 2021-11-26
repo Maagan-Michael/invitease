@@ -1,4 +1,8 @@
 # Invitease
+<p align="center">
+  <img alt="Invitease logo" width=100px height=100px src="https://raw.githubusercontent.com/Maagan-Michael/invitease/master/invitation-card.svg"></img>
+</p>
+
 ### Description
 A self contained invitation management system for gatekeeping.
 ### Purpose
@@ -27,9 +31,9 @@ In order to remove all the data all you have to do is to remove the volume compl
 - Running `docker-compose logs app` will display the latest log output from the relevant `app` container.
 #### Port is inaccesible
 - Every operating system behaves differently but we need to see that 8080 is listening:
--- Linux: `netstat -ntlp | grep 8080`
--- Mac: `netstat -an -ptcp | awk '$NF == "LISTEN" && /8080/ {print}'`
--- Windows: `netstat -aof | findstr :8080`
+  - Linux: `netstat -ntlp | grep 8080`
+  - Mac: `netstat -an -ptcp | awk '$NF == "LISTEN" && /8080/ {print}'`
+  - Windows: `netstat -aof | findstr :8080`
 If it's not there's either a problem with our Docker installation or the relevant definition disappeared from `docker-compose.yml`.
 
 Made with :heart: by members and friends of Kibbutz Ma'agan Michael.
