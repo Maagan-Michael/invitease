@@ -9,7 +9,9 @@ A self contained invitation management system for gatekeeping.
 Serves as a focal point for inviting guests to a venue protected by guarded gate.
 ### Infrastructure
 The project is written in Python with PostgreSQL database on top of Docker.
+
 Web service management is done with `uvicorn` running `FastAPI`.
+
 Database access is managed with `psycopg2` and `SQLAlchemy` (Soon `alembic` implementation will manage the schema versioning).
 `FastAPI` template type is `jinja2`.
 ### First run
@@ -21,8 +23,11 @@ The project dependencies are Docker and docker-compose.
 - Voila!
 ### Database
 The database schema is automatically generated when the Postgres docker is loaded, the relevant files are in `db_init`.
+
 Sometimes after playing with the database you may want to start clean.
+
 The database is stored inside a docker volume, configured inside the `docker-compose.yml`.
+
 In order to remove all the data all you have to do is to remove the volume completely, it will be automatically recreated when `docker-compose up` is invoked.
 ### Troubleshooting FAQ
 #### Are all the dockers running?
