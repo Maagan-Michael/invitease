@@ -1,6 +1,7 @@
 version: "3.9"
 services:
   app:
+    hostname: app
     build: .
     volumes:
       - ./src:/code/src
@@ -11,6 +12,7 @@ services:
 
   db:
     image: postgres:14-alpine
+    hostname: db
     restart: always
     environment:
       - POSTGRES_PASSWORD=password
@@ -21,5 +23,17 @@ services:
     volumes:
       - ./db_init/:/docker-entrypoint-initdb.d/
       - pg_data:/var/lib/postgresql/data
+  keycloak:
+    image: bitnami/keycloak:15.0.2
+    hostname: keycloak
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+    environment:
+      - KEYCLOAK_DATABASE_HOST=db
+      - KEYCLOAK_DATABASE_USER=invitease
+      - KEYCLOAK_DATABASE_PASSWORD=password
+      - KEYCLOAK_DATABASE_NAME=keycloak
 volumes:
   pg_data:        
