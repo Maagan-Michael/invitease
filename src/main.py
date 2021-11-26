@@ -7,7 +7,7 @@ from sqlalchemy import text
 
 
 mainFunc = FastAPI()
-templates = Jinja2Templates(directory='programCode/templates/')
+templates = Jinja2Templates(directory='src/templates/')
 
 con = psycopg2.connect("dbname=invitease user=invitease host=db password=password")
 
