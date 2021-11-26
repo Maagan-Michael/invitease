@@ -3,7 +3,7 @@ services:
   app:
     build: .
     volumes:
-      - ./programCode:/code/programCode
+      - ./src:/code/src
     ports:
       - 8080:8080
     depends_on:
