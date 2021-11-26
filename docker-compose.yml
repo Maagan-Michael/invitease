@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  app:
+    build: .
+    volumes:
+      - ./programCode:/code/programCode
+    ports:
+      - 8080:8080
+    depends_on:
+      - "db"
+
+  db:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=invitease
+      - POSTGRES_DB=invitease
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db_init/:/docker-entrypoint-initdb.d/
+      - ./store:/var/lib/postgresql/data
+        

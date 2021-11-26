@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Form</title>
+    <style>
+        body {background-color: powderblue;}
+        div   {color: blue;}
+        .header    {color: red;}
+    </style>
+</head>
+<body>
+<form method="post">
+    <input type="text" name="table_name" value="{{ table_name }}"/>
+    <input type="submit">
+</form>
+<!-- <p>Result: {{ result }}</p> -->
+{% for i in result %}
+<div>
+    <div style="float:left;"> {{ i[0] }} </div>
+    <div style="float:right;"> {{ i[1] }} </div>
+    </div>
+{% endfor %}
+</body>
+</html>
