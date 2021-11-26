@@ -4,10 +4,11 @@ from fastapi import FastAPI,Form,Request
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine #, engine
 from sqlalchemy import text
+from datetime import date, datetime
 
 
 mainFunc = FastAPI()
-templates = Jinja2Templates(directory='programCode/templates/')
+templates = Jinja2Templates(directory='src/templates/')
 
 con = psycopg2.connect("dbname=invitease user=invitease host=db password=password")
 
@@ -73,4 +74,23 @@ def form_post(request: Request, guard_name: str = Form(...)):
     # con.commit()
     result = f'{guard_name} has been added as a guard'
     return templates.TemplateResponse('add_guard.html', context={'request': request, 'result': result, 'guard_name': guard_name})
+
+@mainFunc.get('/db/invite_guests')
+def form_post(request: Request):
+    result = 'Invite a guest'
+    return templates.TemplateResponse('invite_guests.html', context={'request': request, 'result': result})
+
+@mainFunc.post('/db/invite_guests')
+def form_post(request: Request, current_invitees: int = Form(...)): #, active: bool = Form(...)):
+
+    currentTime = datetime.now()
+    connection =  engine.connect()
+    transaction = connection.begin()
+    result = connection.execute(text(f"INSERT INTO invitations (current_invitees,summoner_id,active,creation_time,mod_time,comment) VALUES ({current_invitees},1,TRUE,'{currentTime}','{currentTime}','hello world');"))
+    transaction.commit()
+    
+    # cur.execute(f"INSERT INTO guards (guard_name) VALUES ('{guard_name}');")
+    # con.commit()
+    result = f'You have invited {current_invitees} guests'
+    return templates.TemplateResponse('invite_guests.html', context={'request': request, 'result': result, 'current_invitees': current_invitees})#, 'active': active})
 
