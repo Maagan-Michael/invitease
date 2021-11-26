@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <title>Sample Form</title>
     <style>
+        /*
         body {background-color: powderblue;}
-        div   {color: blue;}
         .header    {color: red;}
+        */
+        .row   {
+            display: flex;
+            justify-content: space-around;
+            }
     </style>
 </head>
 <body>
@@ -15,11 +20,13 @@
     <input type="submit">
 </form>
 <!-- <p>Result: {{ result }}</p> -->
+<div class="table"><div class="header">
 {% for i in result %}
-<div>
-    <div style="float:left;"> {{ i[0] }} </div>
-    <div style="float:right;"> {{ i[1] }} </div>
-    </div>
+<div class="row">
+    <div class="guard_id"> {{ i[0] }} </div>
+    <div class="guard_name"> {{ i[1] }} </div>
+</div>
 {% endfor %}
+</div></div>
 </body>
 </html>
