@@ -6,13 +6,16 @@ create table users(
 	user_id SERIAL,
     first_name TEXT,
 	last_name TEXT,
-	cellular_number cellno
+	cellular_number cellno,
+	email TEXT
 );
 
 create table invitations(
 	invitation_id INT GENERATED ALWAYS AS IDENTITY,
-	summoner_id INT NOT NULL,
-	current_invitees INT,
+	user_id INT NOT NULL,
+	invitees_amount INT,
+	invitees_admited INT,
+	invitees_arrival_time TIMESTAMPTZ,
 	active BOOLEAN NOT NULL,
 	creation_time TIMESTAMPTZ,
 	mod_time TIMESTAMPTZ,
