@@ -54,3 +54,5 @@ INSERT INTO event_log(event_time,guard_id,event_type,amount_before,amount_after)
 VALUES
 	(NOW(),1,'entered',4,5),
 	(NOW(),2,'cancelled',3,4);
+
+Create database keycloak;
