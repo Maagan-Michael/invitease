@@ -15,13 +15,13 @@ app.include_router(routers.inviter_router)
 
 templates = Jinja2Templates(directory='src/templates/')
 
+# Samples:
 con = psycopg2.connect("dbname=invitease user=invitease host=db password=password")
 
 cur = con.cursor()
 
 engine = create_engine("postgresql://invitease:password@db:5432/invitease")
 
-# Samples:
 @app.get("/")
 def read_root():
    
