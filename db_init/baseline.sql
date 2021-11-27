@@ -1,43 +1,51 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";  
+
 CREATE TYPE event_type AS ENUM ('entered', 'cancelled', 'created', 'modified','guard_in', 'guard_out');
 
 CREATE DOMAIN cellno AS TEXT CHECK (VALUE ~* '^0[0-9]{8,9}$');
 
 create table users(
-	user_id SERIAL,
-    first_name TEXT,
-	last_name TEXT,
+	user_id UUID NOT NULL,
+    first_name VARCHAR(255) NOT NULL,
+	last_name VARCHAR(255) NOT NULL,
 	cellular_number cellno,
-	email TEXT
+	email VARCHAR(255),
+	creation_timestamp TIMESTAMPTZ,
+	modify_timestamp TIMESTAMPTZ,
+	PRIMARY KEY(user_id)
 );
 
 create table invitations(
-	invitation_id INT GENERATED ALWAYS AS IDENTITY,
-	user_id INT NOT NULL,
-	invitees_amount INT,
-	invitees_admited INT,
+	invitation_id UUID NOT NULL,
+	user_id UUID NOT NULL REFERENCES users (user_id),
+	invitees_amount INT NOT NULL,
+	invitees_admited INT NOT NULL,
 	invitees_arrival_time TIMESTAMPTZ,
 	active BOOLEAN NOT NULL,
-	creation_time TIMESTAMPTZ,
-	mod_time TIMESTAMPTZ,
-	comment TEXT,
+	creation_timestamp TIMESTAMPTZ,
+	modify_timestamp TIMESTAMPTZ,
+	comment_for_guard TEXT,
 	PRIMARY KEY (invitation_id)
 );
 
 create table guards(
-	guard_id INT UNIQUE GENERATED ALWAYS AS IDENTITY,
-	guard_name VARCHAR(16)
-  
+	guard_id UUID NOT NULL,
+	guard_name VARCHAR(255) NOT NULL,
+	creation_timestamp TIMESTAMPTZ,
+	modify_timestamp TIMESTAMPTZ,
+	PRIMARY KEY(guard_id)
 );
 
 create table event_log(
-	event_id INT GENERATED ALWAYS AS IDENTITY,
-	event_time TIMESTAMPTZ NOT NULL,
+	event_id UUID NOT NULL,
+	event_timestamp TIMESTAMPTZ NOT NULL,
 	event_type event_type NOT NULL,
 	amount_before INT,
 	amount_after INT,
-	summoner VARCHAR(100),
-	guard_id INT REFERENCES guards (guard_id),
-	invitation_id VARCHAR(16)
+	summoner UUID REFERENCES users (user_id),
+	guard_id UUID REFERENCES guards (guard_id),
+	invitation_id UUID REFERENCES invitations (invitation_id),
+	PRIMARY KEY(event_id)
 );
 
 /* Mock data */
