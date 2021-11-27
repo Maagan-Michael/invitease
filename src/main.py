@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine #, engine
 from sqlalchemy import text
 from datetime import date
-import routers 
+import routers
 
 app = FastAPI()
 app.include_router(routers.admin_router)
