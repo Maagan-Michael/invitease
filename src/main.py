@@ -6,12 +6,12 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine #, engine
 from sqlalchemy import text
 from datetime import date
-import routers
+from .routers import admin_router, guard_router,inviter_router
 
 app = FastAPI()
-app.include_router(routers.admin_router)
-app.include_router(routers.guard_router)
-app.include_router(routers.inviter_router)
+app.include_router(admin_router)
+app.include_router(guard_router)
+app.include_router(inviter_router)
 
 templates = Jinja2Templates(directory='src/templates/')
 
