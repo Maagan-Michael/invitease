@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Invitease logo" src="https://raw.githubusercontent.com/Maagan-Michael/invitease/master/invitease_logo.svg"></img>
+  <img alt="Invitease logo" src="invitease_logo.svg"></img>
 </p>
 
 ### Description
