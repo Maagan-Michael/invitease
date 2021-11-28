@@ -1,6 +1,5 @@
-# Invitease
 <p align="center">
-  <img alt="Invitease logo" width=100px height=100px src="https://raw.githubusercontent.com/Maagan-Michael/invitease/master/invitation-card.svg"></img>
+  <img alt="Invitease logo" width=100px height=100px style="border-radius:25px;"src="https://raw.githubusercontent.com/Maagan-Michael/invitease/master/invitease_logo.svg"></img>
 </p>
 
 ### Description
