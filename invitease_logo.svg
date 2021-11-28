@@ -30,14 +30,15 @@
      fit-margin-right="15"
      fit-margin-bottom="15"
      inkscape:zoom="0.55678311"
-     inkscape:cx="46.696819"
+     inkscape:cx="270.30274"
      inkscape:cy="176.9091"
      inkscape:window-width="1440"
      inkscape:window-height="847"
      inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer3" />
+     inkscape:current-layer="layer3"
+     width="191.9026mm" />
   <defs
      id="defs23881">
     <rect
@@ -70,6 +71,17 @@
          offset="1"
          id="stop22079" />
     </linearGradient>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath26196">
+      <rect
+         style="fill:#bb00e3;stroke-width:2.775;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.987903;paint-order:markers fill stroke"
+         id="rect26198"
+         width="209.56319"
+         height="59.875202"
+         x="36.937542"
+         y="177.72568" />
+    </clipPath>
   </defs>
   <g
      inkscape:groupmode="layer"
@@ -79,12 +91,14 @@
     <rect
        style="fill:url(#linearGradient22083);fill-opacity:1;stroke-width:2.775;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.987903;paint-order:markers fill stroke"
        id="rect20954"
-       width="352.10721"
+       width="352.10699"
        height="181.1272"
        x="-71.053604"
        y="137.53239"
-       inkscape:transform-center-x="-22.3344"
-       inkscape:transform-center-y="37.0656" />
+       inkscape:transform-center-x="34.812265"
+       inkscape:transform-center-y="24.533811"
+       clip-path="url(#clipPath26196)"
+       transform="matrix(0.91572667,0,0,1.098476,11.943143,-20.449834)" />
   </g>
   <g
      inkscape:label="Layer 1"
@@ -111,11 +125,11 @@
          id="polygon1040" />
       <polygon
          class="cls-2"
-         points="59.71,54.03 59.71,245.39 250,380.04 440.29,245.39 440.29,54.03 "
+         points="440.29,245.39 440.29,54.03 59.71,54.03 59.71,245.39 250,380.04 "
          id="polygon1042" />
       <polygon
          class="cls-3"
-         points="407.93,54.03 407.93,268.3 440.29,245.39 440.29,54.03 "
+         points="440.29,54.03 407.93,54.03 407.93,268.3 440.29,245.39 "
          id="polygon1044" />
       <path
          class="cls-4"
@@ -143,7 +157,7 @@
          id="path1056" />
       <polygon
          class="cls-7"
-         points="59.71,54.03 59.71,245.39 250,380.04 440.29,245.39 440.29,54.03 "
+         points="440.29,245.39 440.29,54.03 59.71,54.03 59.71,245.39 250,380.04 "
          id="polygon1058" />
       <path
          class="cls-7"
@@ -170,8 +184,8 @@
        inkscape:export-ydpi="90"><tspan
          x="467.1709"
          y="801.51089"
-         id="tspan26086"><tspan
+         id="tspan26810"><tspan
            style="font-family:Pacifico;-inkscape-font-specification:Pacifico"
-           id="tspan26084">Invitease</tspan></tspan></text>
+           id="tspan26808">Invitease</tspan></tspan></text>
   </g>
 </svg>
