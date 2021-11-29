@@ -2,9 +2,7 @@
   <img alt="Invitease logo" src="invitease_logo.svg"></img>
 </p>
 
-<p align="center">
 [![Snyk Container](https://github.com/Maagan-Michael/invitease/actions/workflows/snyk-container-analysis.yml/badge.svg)](https://github.com/Maagan-Michael/invitease/actions/workflows/snyk-container-analysis.yml)
-  </p>
 ### Description
 A self contained invitation management system for gatekeeping.
 ### Purpose
