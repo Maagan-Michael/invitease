@@ -7,8 +7,18 @@
 <body>
 <form method="post">
     <input type="number" name="invitees_amount" value="{{ invitees_amount }}"/>
+    <input type="text" name="comment" value="{{ comment }}"/>
     <input type="submit">
 </form>
 <p>Result: {{ result }}</p>
+<div>
+    <table style="width:100%">
+        {% for i in userInvitations %}
+          <tr>
+             <td>{{i}}</td>
+          </tr>
+        {% endfor %}
+    </table>
+</div>
 </body>
 </html>

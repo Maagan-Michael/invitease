@@ -81,22 +81,32 @@ def form_post(request: Request, guard_name: str = Form(...)):
     result = f'{guard_name} has been added as a guard'
     return templates.TemplateResponse('add_guard.html', context={'request': request, 'result': result, 'guard_name': guard_name})
 
-@app.get('/db/invite_guests')
-def form_post(request: Request):
+@app.get('/db/invite_guests/{user_id}')
+def read_item(request: Request, user_id: str):
+
+    #print(user_id)
+    #get all invitations from user
+    connection =  engine.connect()
+    result = connection.execute(text("SELECT * FROM invitations WHERE user_id = " + user_id + ";"))
+    userInvitations = result.all()
+
     result = 'Invite a guest'
-    return templates.TemplateResponse('invite_guests.html', context={'request': request, 'result': result})
+    return templates.TemplateResponse('invite_guests.html', context={'request': request, 'result': result,'userInvitations': userInvitations}) 
 
 
-@app.post('/db/invite_guests')
-def form_post(request: Request, invitees_amount: str = Form(...)):
+@app.post('/db/invite_guests/{user_id}')
+def form_post(request: Request, user_id: str, invitees_amount: int = Form(...),comment: str = Form(...)):
 
+    # get date for setting creation_time, mod_time
     currentDate = datetime.datetime.now()
     connection =  engine.connect()
     transaction = connection.begin()
-    result = connection.execute(text(f"INSERT INTO invitations (user_id,invitees_amount,invitees_admited,invitees_arrival_time,active,creation_time,mod_time,comment) VALUES (1,'{invitees_amount}',0,'{currentDate}',TRUE,'{currentDate}','{currentDate}','hello world');"))
+    result = connection.execute(text(f"INSERT INTO invitations (user_id,invitees_amount,invitees_admited,invitees_arrival_time,active,creation_time,mod_time,comment) VALUES ({user_id},{invitees_amount},0,'{currentDate}',TRUE,'{currentDate}','{currentDate}','{comment}');"))
     transaction.commit()
+
+    connection =  engine.connect()
+    result = connection.execute(text("SELECT * FROM invitations WHERE user_id = " + user_id + ";"))
+    userInvitations = result.all()
     
-    # cur.execute(f"INSERT INTO guards (guard_name) VALUES ('{guard_name}');")
-    # con.commit()
-    result = f'You have invited {invitees_amount} guests. Welcome!'
-    return templates.TemplateResponse('add_guard.html', context={'request': request, 'result': result, 'invitees_amount': invitees_amount})
+    result = f'הזמנת {invitees_amount} אורחים. וכתבת הערה לשומר: {comment}'
+    return templates.TemplateResponse('invite_guests.html', context={'request': request, 'result': result, 'invitees_amount': invitees_amount, 'comment': comment,'userInvitations': userInvitations})
