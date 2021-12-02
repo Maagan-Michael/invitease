@@ -1,22 +1,24 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";  
 
 CREATE TYPE event_type AS ENUM ('entered', 'cancelled', 'created', 'modified','guard_in', 'guard_out');
+CREATE TYPE role_type AS ENUM ('user', 'guard', 'admin');
 
 CREATE DOMAIN cellno AS TEXT CHECK (VALUE ~* '^0[0-9]{8,9}$');
 
 create table users(
-	user_id UUID NOT NULL,
+	user_id UUID NOT NULL DEFAULT uuid_generate_v4(),
     first_name VARCHAR(255) NOT NULL,
 	last_name VARCHAR(255) NOT NULL,
 	cellular_number cellno,
 	email VARCHAR(255),
+	user_role role_type NOT NULL DEFAULT 'user',
 	creation_timestamp TIMESTAMPTZ,
 	modify_timestamp TIMESTAMPTZ,
 	PRIMARY KEY(user_id)
 );
 
 create table invitations(
-	invitation_id UUID NOT NULL,
+	invitation_id UUID NOT NULL DEFAULT uuid_generate_v4(),
 	user_id UUID NOT NULL REFERENCES users (user_id),
 	invitees_amount INT NOT NULL,
 	invitees_admited INT NOT NULL,
@@ -28,32 +30,19 @@ create table invitations(
 	PRIMARY KEY (invitation_id)
 );
 
-create table guards(
-	guard_id UUID NOT NULL,
-	guard_name VARCHAR(255) NOT NULL,
-	creation_timestamp TIMESTAMPTZ,
-	modify_timestamp TIMESTAMPTZ,
-	PRIMARY KEY(guard_id)
-);
-
 create table event_log(
-	event_id UUID NOT NULL,
+	event_id UUID NOT NULL DEFAULT uuid_generate_v4(),
 	event_timestamp TIMESTAMPTZ NOT NULL,
 	event_type event_type NOT NULL,
 	amount_before INT,
 	amount_after INT,
 	summoner UUID REFERENCES users (user_id),
-	guard_id UUID REFERENCES guards (guard_id),
+	guard_id UUID REFERENCES users (user_id),
 	invitation_id UUID REFERENCES invitations (invitation_id),
 	PRIMARY KEY(event_id)
 );
 
 /* Mock data */
-
-INSERT INTO guards(guard_name)
-VALUES
-  	('Avraham'),
-  	('Dafna');
 
 INSERT INTO users(first_name,last_name,cellular_number)
 VALUES
