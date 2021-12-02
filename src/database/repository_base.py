@@ -14,24 +14,24 @@ class RepositoryBase(object):
         with Session(bind=self.connection) as session:
             return list(session.query(self.table))
             
-    def add(self, entity):
+    def add_item(self, item):
         with Session(bind=self.connection) as session:
-            session.add(entity)
+            session.add(item)
             session.commit()
 
-    def add_all(self, entities:list):
+    def add_all(self, items:list):
         with Session(bind=self.connection) as session:
-            session.bulk_save_objects(entities)
+            session.bulk_save_objects(items)
             session.commit()
 
-    def update(self, entity_id, update_data: dict):
+    def update_item(self, item_id, update_data: dict):
         with Session(bind=self.connection) as session:
             session.query(self.table) \
-                .filter(self.primay_key == entity_id) \
+                .filter(self.primay_key == item_id) \
                 .update(update_data)
             session.commit()
-            
-    def delete(self, entity):
+
+    def delete_item(self, item):
         with Session(bind=self.connection) as session:
-            session.delete(entity)
+            session.delete(item)
             session.commit()
