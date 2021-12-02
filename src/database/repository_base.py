@@ -1,8 +1,13 @@
+from sqlalchemy.sql import select
+from sqlalchemy.orm import Session
+
 class RepositoryBase(object):
-    def __init__(self, connection, table_name) -> None:
+    def __init__(self, connection, table) -> None:
         super().__init__()
         self.connection = connection
-        self.table_name = table_name
+        self.table = table
     
     def get_all(self):
-        return self.connection.execute(f"SELECT * FROM {self.table_name};")
+        query = select(self.table)
+        with Session(bind=self.connection) as session:
+            return list(session.execute(query))
