@@ -36,7 +36,7 @@ create table event_log(
 	event_type event_type NOT NULL,
 	amount_before INT,
 	amount_after INT,
-	summoner UUID REFERENCES users (user_id),
+	user_id UUID REFERENCES users (user_id),
 	guard_id UUID REFERENCES users (user_id),
 	invitation_id UUID REFERENCES invitations (invitation_id),
 	PRIMARY KEY(event_id)
