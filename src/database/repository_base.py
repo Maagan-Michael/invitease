@@ -8,6 +8,5 @@ class RepositoryBase(object):
         self.table = table
     
     def get_all(self):
-        query = select(self.table)
         with Session(bind=self.connection) as session:
-            return list(session.execute(query))
+            return list(session.query(self.table))
