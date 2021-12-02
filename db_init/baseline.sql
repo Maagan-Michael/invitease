@@ -44,13 +44,13 @@ create table event_log(
 
 /* Mock data */
 
-INSERT INTO users(first_name,last_name,cellular_number)
+INSERT INTO users(user_id,first_name,last_name,cellular_number)
 VALUES
-	('Israel','Israeli','0524443333'),
-	('Israel','Israelovich','054111333');
+	('ce170212-7242-4f56-9298-d84b521eaedd','Israel','Israeli','0524443333'),
+	('c397aebd-9cfe-47d1-9f1c-75aab323daf5','Israel','Israelovich','054111333');
 
 
-INSERT INTO event_log(event_time,guard_id,event_type,amount_before,amount_after)
+INSERT INTO event_log(event_timestamp,guard_id,event_type,amount_before,amount_after)
 VALUES
-	(NOW(),1,'entered',4,5),
-	(NOW(),2,'cancelled',3,4);
+	(NOW(),'ce170212-7242-4f56-9298-d84b521eaedd','entered',4,5),
+	(NOW(),'c397aebd-9cfe-47d1-9f1c-75aab323daf5','cancelled',3,4);
