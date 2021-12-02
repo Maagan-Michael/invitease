@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.types import DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import declarative_base
@@ -21,7 +21,7 @@ class Invitation(Base):
     __tablename__ = 'invitations'
 
     invitation_id = Column(UUID(as_uuid=True), primary_key=True)
-    user_id = Column(UUID(as_uuid=True), ForeignKey('user.user_id'))
+    user_id = Column(UUID(as_uuid=True))
     invitees_amount = Column(Integer)
     invitees_admitted = Column(Integer)
     invitees_arrival_timestamp = DateTime(timezone=True)
