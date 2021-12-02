@@ -12,8 +12,8 @@ create table users(
 	cellular_number cellno,
 	email VARCHAR(255),
 	user_role role_type NOT NULL DEFAULT 'user',
-	creation_timestamp TIMESTAMPTZ,
-	modify_timestamp TIMESTAMPTZ,
+	creation_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	modify_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	PRIMARY KEY(user_id)
 );
 
@@ -24,15 +24,15 @@ create table invitations(
 	invitees_admitted INT NOT NULL,
 	invitees_arrival_timestamp TIMESTAMPTZ,
 	is_active BOOLEAN NOT NULL,
-	creation_timestamp TIMESTAMPTZ,
-	modify_timestamp TIMESTAMPTZ,
+	creation_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	modify_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	comment_for_guard TEXT,
 	PRIMARY KEY (invitation_id)
 );
 
 create table event_log(
 	event_id UUID NOT NULL DEFAULT uuid_generate_v4(),
-	event_timestamp TIMESTAMPTZ NOT NULL,
+	event_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	event_type event_type NOT NULL,
 	amount_before INT,
 	amount_after INT,
