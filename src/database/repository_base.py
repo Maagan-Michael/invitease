@@ -24,6 +24,12 @@ class RepositoryBase(object):
             session.bulk_save_objects(items)
             session.commit()
 
+    def get_by_id(self, item_id):
+        with Session(bind=self.connection) as session:
+            return session.query(self.table) \
+                .filter(self.primay_key == item_id) \
+                .first()
+
     def update_item(self, item_id, update_data: dict):
         with Session(bind=self.connection) as session:
             session.query(self.table) \
