@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine #, engine
 from sqlalchemy import text
 from datetime import date
-from .routers import admin_router, guard_router,inviter_router
+from src.routers import admin_router, guard_router,inviter_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
