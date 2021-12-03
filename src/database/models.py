@@ -17,6 +17,7 @@ class User(Base):
     user_role = Column(String, nullable=False)
     creation_timestamp = Column(DateTime(timezone=True), nullable=False)
     modify_timestamp = Column(DateTime(timezone=True), nullable=False)
+    is_active = Column(Boolean, nullable=False)
     
 class Invitation(Base):
     __tablename__ = 'invitations'

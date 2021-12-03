@@ -1,7 +1,5 @@
-from sqlalchemy.orm.session import sessionmaker
-from sqlalchemy.sql import select
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.expression import update
+
 
 class RepositoryBase(object):
     def __init__(self, connection, table, primary_key) -> None:
@@ -9,17 +7,21 @@ class RepositoryBase(object):
         self.connection = connection
         self.primay_key = primary_key
         self.table = table
-    
+
     def get_all(self):
         with Session(bind=self.connection) as session:
             return list(session.query(self.table))
-            
+
+    def query(self, query):
+        with Session(bind=self.connection) as session:
+            return list(session.query(self.table).filter(query))
+
     def add_item(self, item):
         with Session(bind=self.connection) as session:
             session.add(item)
             session.commit()
 
-    def add_all(self, items:list):
+    def add_all(self, items: list):
         with Session(bind=self.connection) as session:
             session.bulk_save_objects(items)
             session.commit()
