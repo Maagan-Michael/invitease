@@ -2,7 +2,8 @@
   <img alt="Invitease logo" src="invitease_logo.svg"></img>
 </p>
 
-[![Snyk Container](https://github.com/Maagan-Michael/invitease/actions/workflows/snyk-container-analysis.yml/badge.svg)](https://github.com/Maagan-Michael/invitease/actions/workflows/snyk-container-analysis.yml)
+<p align="center"><img src="https://github.com/Maagan-Michael/invitease/actions/workflows/snyk-container-analysis.yml/badge.svg"></p>
+
 ### Description
 A self contained invitation management system for gatekeeping.
 ### Purpose
@@ -41,5 +42,8 @@ In order to remove all the data all you have to do is to remove the volume compl
   - Windows: `netstat -aof | findstr :8080`
 If it's not there's either a problem with our Docker installation or the relevant definition disappeared from `docker-compose.yml`.
 
-Made with :heart: by members and friends of Kibbutz Ma'agan Michael.
+### Legal
+Logo was contributed by [Stockio.com](https://www.stockio.com/free-icon/wedding-icons-invitation-card).
+
+##### Made with :heart: by members and friends of Kibbutz Ma'agan Michael.
 
