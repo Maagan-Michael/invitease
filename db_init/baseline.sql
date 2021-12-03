@@ -12,6 +12,7 @@ create table users(
 	cellular_number cellno NULL,
 	email VARCHAR(255) NULL,
 	user_role role_type NOT NULL DEFAULT 'user',
+	is_active BOOLEAN NOT NULL DEFAULT true,
 	creation_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	modify_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	PRIMARY KEY(user_id)
