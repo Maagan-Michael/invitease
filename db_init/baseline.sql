@@ -1,59 +1,57 @@
-CREATE TYPE event_type AS ENUM ('entered', 'cancelled', 'created', 'modified','guard_in', 'guard_out');
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";  
 
-CREATE DOMAIN cellno AS TEXT CHECK (VALUE ~* '^0[0-9]{8,9}$');
+CREATE TYPE event_type AS ENUM ('entered', 'cancelled', 'created', 'modified','guard_in', 'guard_out');
+CREATE TYPE role_type AS ENUM ('user', 'guard', 'admin');
+
+CREATE DOMAIN cellno AS VARCHAR(20) CHECK (VALUE ~* '^0[0-9]{9}$');
 
 create table users(
-	user_id SERIAL,
-    first_name TEXT,
-	last_name TEXT,
-	cellular_number cellno,
-	email TEXT
+	user_id UUID NOT NULL DEFAULT uuid_generate_v4(),
+    first_name VARCHAR(255) NOT NULL,
+	last_name VARCHAR(255) NOT NULL,
+	cellular_number cellno NULL,
+	email VARCHAR(255) NULL,
+	user_role role_type NOT NULL DEFAULT 'user',
+	is_active BOOLEAN NOT NULL DEFAULT true,
+	creation_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	modify_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	PRIMARY KEY(user_id)
 );
 
 create table invitations(
-	invitation_id INT GENERATED ALWAYS AS IDENTITY,
-	user_id INT NOT NULL,
-	invitees_amount INT,
-	invitees_admited INT,
-	invitees_arrival_time TIMESTAMPTZ,
-	active BOOLEAN NOT NULL,
-	creation_time TIMESTAMPTZ,
-	mod_time TIMESTAMPTZ,
-	comment TEXT,
+	invitation_id UUID NOT NULL DEFAULT uuid_generate_v4(),
+	user_id UUID NOT NULL REFERENCES users (user_id),
+	invitees_amount INT NOT NULL,
+	invitees_admitted INT NOT NULL,
+	invitees_arrival_timestamp TIMESTAMPTZ NULL,
+	is_active BOOLEAN NOT NULL,
+	creation_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	modify_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+	comment_for_guard TEXT NULL,
 	PRIMARY KEY (invitation_id)
 );
 
-create table guards(
-	guard_id INT UNIQUE GENERATED ALWAYS AS IDENTITY,
-	guard_name VARCHAR(16)
-  
-);
-
 create table event_log(
-	event_id INT GENERATED ALWAYS AS IDENTITY,
-	event_time TIMESTAMPTZ NOT NULL,
+	event_id UUID NOT NULL DEFAULT uuid_generate_v4(),
+	event_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 	event_type event_type NOT NULL,
-	amount_before INT,
-	amount_after INT,
-	summoner VARCHAR(100),
-	guard_id INT REFERENCES guards (guard_id),
-	invitation_id VARCHAR(16)
+	amount_before INT NULL,
+	amount_after INT NULL,
+	user_id UUID NULL REFERENCES users (user_id),
+	guard_id UUID NULL REFERENCES users (user_id),
+	invitation_id UUID NULL REFERENCES invitations (invitation_id),
+	PRIMARY KEY(event_id)
 );
 
 /* Mock data */
 
-INSERT INTO guards(guard_name)
+INSERT INTO users(user_id,first_name,last_name,cellular_number)
 VALUES
-  	('Avraham'),
-  	('Dafna');
-
-INSERT INTO users(first_name,last_name,cellular_number)
-VALUES
-	('Israel','Israeli','0524443333'),
-	('Israel','Israelovich','054111333');
+	('ce170212-7242-4f56-9298-d84b521eaedd','Israel','Israeli','0524443333'),
+	('c397aebd-9cfe-47d1-9f1c-75aab323daf5','Israel','Israelovich','054111333');
 
 
-INSERT INTO event_log(event_time,guard_id,event_type,amount_before,amount_after)
+INSERT INTO event_log(event_timestamp,guard_id,event_type,amount_before,amount_after)
 VALUES
-	(NOW(),1,'entered',4,5),
-	(NOW(),2,'cancelled',3,4);
+	(NOW(),'ce170212-7242-4f56-9298-d84b521eaedd','entered',4,5),
+	(NOW(),'c397aebd-9cfe-47d1-9f1c-75aab323daf5','cancelled',3,4);
