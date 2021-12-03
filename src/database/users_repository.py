@@ -1,5 +1,5 @@
-from src.database.repository_base import RepositoryBase
-from src.database.models import User
+from database.repository_base import RepositoryBase
+from database.models import User
 
 class UsersRepository(RepositoryBase):
     def __init__(self, connection) -> None:

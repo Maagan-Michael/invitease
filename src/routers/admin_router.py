@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
-from src.database.connection import create_connection
-from src.database.users_repository import UsersRepository
+from database.connection import create_connection
+from database.users_repository import UsersRepository
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 

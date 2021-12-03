@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine #, engine
 from sqlalchemy import text
 from datetime import date
-from src.routers import admin_router, guard_router,inviter_router
+from routers import admin_router, guard_router,inviter_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -26,7 +26,7 @@ app.include_router(inviter_router)
 templates = Jinja2Templates(directory='src/templates/')
 
 # Samples:
-con = psycopg2.connect("dbname=invitease user=invitease host=db password=password")
+con = psycog2.connect("dbname=invitease user=invitease host=db password=password")
 
 cur = con.cursor()
 
