@@ -3,7 +3,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TYPE event_type AS ENUM ('entered', 'cancelled', 'created', 'modified','guard_in', 'guard_out');
 CREATE TYPE role_type AS ENUM ('user', 'guard', 'admin');
 
-CREATE DOMAIN cellno AS TEXT CHECK (VALUE ~* '^0[0-9]{8,9}$');
+CREATE DOMAIN cellno AS VARCHAR(20) CHECK (VALUE ~* '^0[0-9]{8,9}$');
 
 create table users(
 	user_id UUID NOT NULL DEFAULT uuid_generate_v4(),
