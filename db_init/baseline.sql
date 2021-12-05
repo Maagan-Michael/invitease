@@ -48,7 +48,7 @@ create table event_log(
 INSERT INTO users(user_id,first_name,last_name,cellular_number)
 VALUES
 	('ce170212-7242-4f56-9298-d84b521eaedd','Israel','Israeli','0524443333'),
-	('c397aebd-9cfe-47d1-9f1c-75aab323daf5','Israel','Israelovich','054111333');
+	('c397aebd-9cfe-47d1-9f1c-75aab323daf5','Israel','Israelovich','0541113334');
 
 
 INSERT INTO event_log(event_timestamp,guard_id,event_type,amount_before,amount_after)
