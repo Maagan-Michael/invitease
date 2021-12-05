@@ -1,3 +1,4 @@
+CREATE DATABASE keycloak;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";  
 
 CREATE TYPE event_type AS ENUM ('entered', 'cancelled', 'created', 'modified','guard_in', 'guard_out');
@@ -55,5 +56,3 @@ INSERT INTO event_log(event_timestamp,guard_id,event_type,amount_before,amount_a
 VALUES
 	(NOW(),'ce170212-7242-4f56-9298-d84b521eaedd','entered',4,5),
 	(NOW(),'c397aebd-9cfe-47d1-9f1c-75aab323daf5','cancelled',3,4);
-
-Create database keycloak;
