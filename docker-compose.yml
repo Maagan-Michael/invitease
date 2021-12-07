@@ -31,6 +31,8 @@ services:
     depends_on:
       - db
     environment:
+      - KEYCLOAK_ADMIN_USER=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
       - KEYCLOAK_DATABASE_HOST=db
       - KEYCLOAK_DATABASE_USER=invitease
       - KEYCLOAK_DATABASE_PASSWORD=password
