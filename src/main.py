@@ -1,16 +1,23 @@
 import datetime
+from re import A
 from typing import List, Optional
+from fastapi.param_functions import Depends
 import psycopg2
-from fastapi import FastAPI,Form,Request
+from fastapi import FastAPI, Form, Request
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import create_engine #, engine
+from sqlalchemy import create_engine, log  # , engine
 from sqlalchemy import text
 from datetime import date
-from routers import admin_router, guard_router,inviter_router
+
+from sqlalchemy.orm import raiseload
+from starlette.responses import Response
+from routers import admin_router, guard_router, inviter_router
 from fastapi.middleware.cors import CORSMiddleware
+from utilities import *
+import os
 
 app = FastAPI()
-
+app.middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,6 +30,8 @@ app.include_router(admin_router)
 app.include_router(guard_router)
 app.include_router(inviter_router)
 
+if(os.environ.get('MDT_AUTH')=='true'):
+    init_authentication(app)
 # templates = Jinja2Templates(directory='src/templates/')
 
 # Samples:
@@ -34,7 +43,7 @@ app.include_router(inviter_router)
 
 # @app.get("/")
 # def read_root():
-   
+
 #     connection =  engine.connect()
 #     result = connection.execute(text("SELECT * FROM guards"))
 #     a = result.all()
@@ -56,10 +65,10 @@ app.include_router(inviter_router)
 #     cur.execute(f"SELECT * FROM {table_name};")
 
 #     result = cur.fetchall()
-   
+
 #     return templates.TemplateResponse('view_tables.html', context={'request': request, 'result': result, 'table_name': table_name})
 
-#     # return {"{table} table": cur.fetchall()} 
+#     # return {"{table} table": cur.fetchall()}
 
 
 # @app.get("/db/add/{table}/{column}/{value}")
@@ -71,7 +80,7 @@ app.include_router(inviter_router)
 # async def example(request: Request):
 #     form_data = await request.form()
 #     return form_data
-   
+
 # @app.get('/db/add_guard')
 # def form_post(request: Request):
 #     result = 'Add a guard'
@@ -85,7 +94,7 @@ app.include_router(inviter_router)
 #     transaction = connection.begin()
 #     result = connection.execute(text(f"INSERT INTO guards (guard_name) VALUES ('{guard_name}');"))
 #     transaction.commit()
-    
+
 #     # cur.execute(f"INSERT INTO guards (guard_name) VALUES ('{guard_name}');")
 #     # con.commit()
 #     result = f'{guard_name} has been added as a guard'
@@ -105,9 +114,8 @@ app.include_router(inviter_router)
 #     transaction = connection.begin()
 #     result = connection.execute(text(f"INSERT INTO invitations (user_id,invitees_amount,invitees_admited,invitees_arrival_time,active,creation_time,mod_time,comment) VALUES (1,'{invitees_amount}',0,'{currentDate}',TRUE,'{currentDate}','{currentDate}','hello world');"))
 #     transaction.commit()
-    
+
 #     # cur.execute(f"INSERT INTO guards (guard_name) VALUES ('{guard_name}');")
 #     # con.commit()
 #     result = f'You have invited {invitees_amount} guests. Welcome!'
 #     return templates.TemplateResponse('add_guard.html', context={'request': request, 'result': result, 'invitees_amount': invitees_amount})
-
