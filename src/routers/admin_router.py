@@ -1,11 +1,12 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Path
-from database import UsersRepository, create_connection
+from database import UsersRepository
 from pydantic import BaseModel
 from typing import Optional
 from utilities import *
 
 router = APIRouter(prefix="/admin", tags=["admin"])
+
 
 @router.get("/users", summary="Gets all the users.")
 def read_users(users: UsersRepository = Depends(create_users_repository)):
