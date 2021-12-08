@@ -9,6 +9,9 @@ services:
       - 8080:8080
     depends_on:
       - "db"
+    environment:
+       OPENID_DISCOVERY_URL: 'http://keycloak:8080/auth/realms/master/.well-known/openid-configuration'
+       IVT_ENABLE_AUTH: 'true'
 
   db:
     image: postgres:14-alpine
