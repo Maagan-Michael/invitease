@@ -7,7 +7,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 class AuthenticationConfiguration:
     def __init__(self) -> None:
         self.openid_url = os.environ.get(
-            'OPENID_DISCOVERY_URL', 'http://localhost:8081/auth/realms/master/.well-known/openid-configuration')
+            'IVT_OPENID_DISCOVERY_URL', 'http://localhost:8081/auth/realms/master/.well-known/openid-configuration')
         self._get_user_info_endpoint()
         self.allowed_paths = ('/docs', '/openapi.json')
 
