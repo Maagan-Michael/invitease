@@ -13,7 +13,7 @@ from sqlalchemy.orm import raiseload
 from starlette.responses import Response
 from routers import admin_router, guard_router, inviter_router
 from fastapi.middleware.cors import CORSMiddleware
-from utilities import *
+from authentication import init_authentication
 import os
 
 app = FastAPI()
