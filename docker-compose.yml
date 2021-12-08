@@ -5,13 +5,20 @@ services:
     build: .
     volumes:
       - ./src:/code/src
-    ports:
-      - 8080:8080
+    networks:
+      - web
     depends_on:
       - "db"
+      - "keycloak"
     environment:
        IVT_OPENID_DISCOVERY_URL: 'http://keycloak:8080/auth/realms/master/.well-known/openid-configuration'
        #IVT_ENABLE_AUTH: 'true'
+    labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.invitease.rule=Host(`invitease.localhost`)"
+    - "traefik.http.routers.invitease.entrypoints=web"
+    - "traefik.docker.network=web"
+    - "traefik.http.services.invitease.loadbalancer.server.port=8090"
 
   db:
     image: postgres:14-alpine
@@ -21,16 +28,17 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=invitease
       - POSTGRES_DB=invitease
-    ports:
-      - 5432:5432
+    networks:
+      - web
     volumes:
       - ./db_init/:/docker-entrypoint-initdb.d/
       - pg_data:/var/lib/postgresql/data
+
   keycloak:
     image: bitnami/keycloak:15.0.2
     hostname: keycloak
-    ports:
-      - "8081:8080"
+    networks:
+      - web
     depends_on:
       - db
     environment:
@@ -40,5 +48,43 @@ services:
       - KEYCLOAK_DATABASE_USER=invitease
       - KEYCLOAK_DATABASE_PASSWORD=password
       - KEYCLOAK_DATABASE_NAME=keycloak
+      - KEYCLOAK_FRONTEND_URL=keycloak.localhost
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.rule=Host(`keycloak.localhost`)"
+      - "traefik.http.routers.keycloak.entrypoints=web"
+      - "traefik.docker.network=web"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+
+
+  traefik:
+    image: traefik:v2.5.4
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.traefik.address=:8081"
+    depends_on:
+      - "app"
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`dash.localhost`)"
+      - "traefik.http.routers.dashboard.entrypoints=web"
+      - "traefik.http.routers.dashboard.service=api@internal"
+    ports:
+      - "80:80"
+      #- "8081:8081" # The Web UI (enabled by --api)
+    networks:
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  web:
+    driver: bridge
+
 volumes:
   pg_data:        
