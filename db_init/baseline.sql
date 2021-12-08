@@ -1,3 +1,4 @@
+CREATE DATABASE keycloak;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";  
 
 CREATE TYPE event_type AS ENUM ('entered', 'cancelled', 'created', 'modified','guard_in', 'guard_out');
