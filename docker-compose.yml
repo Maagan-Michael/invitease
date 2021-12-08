@@ -65,7 +65,6 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.traefik.address=:8081"
     depends_on:
       - "app"
     restart: always
@@ -76,7 +75,6 @@ services:
       - "traefik.http.routers.dashboard.service=api@internal"
     ports:
       - "80:80"
-      #- "8081:8081" # The Web UI (enabled by --api)
     networks:
       - web
     volumes:
