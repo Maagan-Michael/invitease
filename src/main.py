@@ -30,7 +30,7 @@ app.include_router(admin_router)
 app.include_router(guard_router)
 app.include_router(inviter_router)
 
-if(os.environ.get('MDT_AUTH')=='true'):
+if(os.environ.get('IVT_ENABLE_AUTH')=='true'):
     init_authentication(app)
 # templates = Jinja2Templates(directory='src/templates/')
 
