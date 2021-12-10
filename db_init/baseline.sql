@@ -56,3 +56,8 @@ INSERT INTO event_log(event_timestamp,guard_id,event_type,amount_before,amount_a
 VALUES
 	(NOW(),'ce170212-7242-4f56-9298-d84b521eaedd','entered',4,5),
 	(NOW(),'c397aebd-9cfe-47d1-9f1c-75aab323daf5','cancelled',3,4);
+
+INSERT INTO invitations(invitation_id,user_id,invitees_amount,invitees_admitted,invitees_arrival_timestamp,is_active,creation_timestamp,modify_timestamp,comment_for_guard)
+values
+    ('ce170212-7242-4f56-9297-d84b528eaedd','c397aebd-9cfe-47d1-9f1c-75aab323daf5',8,6,NOW(),True,NOW(),NOW(),'Hey there'),
+    ('ce170212-7242-4f56-9297-d84b528ea0fd','ce170212-7242-4f56-9298-d84b521eaedd',10,7,NOW(),True,NOW(),NOW(),'Hey Itzik')
