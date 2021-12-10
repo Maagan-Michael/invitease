@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.sql.sqltypes import DateTime
 from fastapi import APIRouter, Depends, Path
-from starlette.responses import FileResponse
+from starlette.responses import StreamingResponse
 from database import UsersRepository
 from pydantic import BaseModel
 from typing import Optional
@@ -10,6 +10,7 @@ from database.events_repository import EventsLogRepository
 from core.utilities import *
 import csv
 import io
+from io import StringIO
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -55,18 +56,26 @@ def update_user(user_id: str = Path(None, description="The unique identifier of 
     users.update_item(user_id, update_data)
 
 
-@router.get("/export_csv", summary="Gets all events in csv to admin")
-def read_users(events: EventsLogRepository = Depends(create_events_entries)):
+@router.get("/eventlogs/export", summary="Gets all events in csv to admin")
+def export_eventlogs(event_logs: EventsLogRepository = Depends(create_events_entries)):
 
-    fileName = "export_" + ".csv" # + datetime.utcnow()
+    fileName = "export_" + ".csv"  # + datetime.utcnow()
 
-    with open(fileName, 'w') as myfile:
-        wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
-        wr.writerow(events.get_all_csv())
+    output = StringIO()
+    headers = ['event_timestamp', 'event_type',
+               'amount_before', 'amount_after']
+    writer = csv.DictWriter(output, fieldnames=headers, quoting=csv.QUOTE_ALL)
+    writer.writeheader()
+    logs = event_logs.get_all()
+    if len(logs) == 0:
+        return "No Content"
 
-    response = FileResponse(fileName,
-                        media_type="text/csv"
-    )
+    for row in logs:
+        writer.writerow({x: y for (x, y) in row.__dict__.items() if x in headers})
+
+    response = StreamingResponse(iter([output.getvalue()]),
+                                 media_type="text/csv"
+                                 )
 
     response.headers["Content-Disposition"] = "attachment; filename=" + fileName
 
