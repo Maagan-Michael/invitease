@@ -42,3 +42,7 @@ class RepositoryBase(object):
         with Session(bind=self.connection) as session:
             session.delete(item)
             session.commit()
+
+    def get_all_csv(self):
+        with Session(bind=self.connection) as session:
+            return list(session.query(self.table))

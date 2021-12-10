@@ -1,9 +1,15 @@
 from datetime import datetime
+
+from sqlalchemy.sql.sqltypes import DateTime
 from fastapi import APIRouter, Depends, Path
+from starlette.responses import FileResponse
 from database import UsersRepository
 from pydantic import BaseModel
 from typing import Optional
+from database.events_repository import EventsLogRepository
 from core.utilities import *
+import csv
+import io
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -47,3 +53,21 @@ def update_user(user_id: str = Path(None, description="The unique identifier of 
         'role_type': role_type
     }
     users.update_item(user_id, update_data)
+
+
+@router.get("/export_csv", summary="Gets all events in csv to admin")
+def read_users(events: EventsLogRepository = Depends(create_events_entries)):
+
+    fileName = "export_" + ".csv" # + datetime.utcnow()
+
+    with open(fileName, 'w') as myfile:
+        wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+        wr.writerow(events.get_all_csv())
+
+    response = FileResponse(fileName,
+                        media_type="text/csv"
+    )
+
+    response.headers["Content-Disposition"] = "attachment; filename=" + fileName
+
+    return response

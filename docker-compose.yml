@@ -29,6 +29,8 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=invitease
       - POSTGRES_DB=invitease
+    ports:
+      - 5432:5432
     networks:
       - web
     volumes:
