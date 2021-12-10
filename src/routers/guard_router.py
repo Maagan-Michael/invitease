@@ -9,5 +9,5 @@ def create_invitations_list():
 
 @router.get("/activeinvitations", summary="Gets all the active invitations.")
 def get_activeinvitations(invitations: db.InvitationRepository = fa.Depends(create_invitations_list)):
-    return invitations.query(lambda x: x.filter(db.Invitation.is_active == True) 
-                            and x.sorted(db.Invitation.invitees_arrival_timestamp))
+    activeInvitations = invitations.query(lambda x: x.filter(db.Invitation.is_active == True))
+    return activeInvitations
