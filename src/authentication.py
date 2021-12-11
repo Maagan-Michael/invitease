@@ -8,6 +8,7 @@ class AuthenticationConfiguration:
     def __init__(self) -> None:
         self.openid_url = os.environ.get(
             'IVT_OPENID_DISCOVERY_URL', 'http://localhost:8081/auth/realms/master/.well-known/openid-configuration')
+
         self._get_user_info_endpoint()
         self.allowed_paths = ('/docs', '/openapi.json')
 
@@ -20,13 +21,17 @@ class AuthenticationConfiguration:
             raise ValueError("Failed to get user info endpoint.")
 
 
-configuration = AuthenticationConfiguration()
+configuration = None
 
 
 def init_authentication(app):
+    global configuration
+    configuration = AuthenticationConfiguration()
+
     def init_openapi():
         return openapi_override(app)
     app.openapi = init_openapi
+
     app.add_middleware(BaseHTTPMiddleware, dispatch=decode_token)
     app.add_middleware(BaseHTTPMiddleware, dispatch=extract_token)
 
