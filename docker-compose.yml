@@ -35,7 +35,7 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   keycloak:
-    image: bitnami/keycloak:15.0.2
+    image: bitnami/keycloak:15.1.0
     hostname: keycloak
     networks:
       - web
