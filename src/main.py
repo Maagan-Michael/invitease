@@ -13,7 +13,7 @@ from sqlalchemy.orm import raiseload
 from starlette.responses import Response
 from routers import admin_router, guard_router, inviter_router
 from fastapi.middleware.cors import CORSMiddleware
-from authentication import init_authentication
+import core.authentication
 import os
 
 app = FastAPI()
@@ -31,7 +31,8 @@ app.include_router(guard_router)
 app.include_router(inviter_router)
 
 if(os.environ.get('IVT_ENABLE_AUTH') == 'true'):
-    init_authentication(app)
+    core.authentication.init_authentication(app)
+
 # templates = Jinja2Templates(directory='src/templates/')
 
 # Samples:

@@ -12,7 +12,8 @@ services:
       - "keycloak"
     environment:
        IVT_OPENID_DISCOVERY_URL: 'http://keycloak:8080/auth/realms/master/.well-known/openid-configuration'
-       #IVT_ENABLE_AUTH: 'true'
+       IVT_OPENID_DISCOVERY_EXTERNAL_URL: 'http://keycloak.localhost/auth/realms/master/.well-known/openid-configuration'
+       IVT_ENABLE_AUTH: 'true'
     labels:
     - "traefik.enable=true"
     - "traefik.http.routers.invitease.rule=Host(`invitease.localhost`)"
