@@ -3,6 +3,7 @@ services:
   app:
     hostname: app
     build: .
+    restart: unless-stopped
     volumes:
       - ./src:/code/src
     networks:
@@ -15,16 +16,37 @@ services:
        IVT_OPENID_DISCOVERY_EXTERNAL_URL: 'http://keycloak.localhost/auth/realms/master/.well-known/openid-configuration'
        IVT_ENABLE_AUTH: 'true'
     labels:
-    - "traefik.enable=true"
-    - "traefik.http.routers.invitease.rule=Host(`invitease.localhost`)"
-    - "traefik.http.routers.invitease.entrypoints=web"
-    - "traefik.docker.network=web"
-    - "traefik.http.services.invitease.loadbalancer.server.port=8090"
+      - "traefik.enable=true"
+      - "traefik.http.routers.invitease.rule=Host(`invitease.localhost`)"
+      - "traefik.http.routers.invitease.entrypoints=web"
+      - "traefik.docker.network=web"
+      - "traefik.http.services.invitease.loadbalancer.server.port=8090"
+
+  dbmanager:
+    image: dpage/pgadmin4
+    hostname: dbmanager
+    restart: unless-stopped
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=invitease@mmm.org.il
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=8084
+    volumes:
+      - ./db_init/servers.json:/pgadmin4/servers.json
+    depends_on:
+      - db
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dbadmin.rule=Host(`dbadmin.localhost`)"
+      - "traefik.http.routers.dbadmin.entrypoints=web"
+      - "traefik.docker.network=web"
+      - "traefik.http.services.dbadmin.loadbalancer.server.port=8084"
 
   db:
     image: postgres:14-alpine
     hostname: db
-    restart: always
+    restart: unless-stopped
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=invitease
@@ -32,12 +54,13 @@ services:
     networks:
       - web
     volumes:
-      - ./db_init/:/docker-entrypoint-initdb.d/
+      - ./db_init/baseline.sql:/docker-entrypoint-initdb.d/baseline.sql
       - pg_data:/var/lib/postgresql/data
 
   keycloak:
     image: bitnami/keycloak:15.1.0
     hostname: keycloak
+    restart: unless-stopped
     networks:
       - web
     depends_on:
@@ -68,7 +91,7 @@ services:
       - "--entrypoints.web.address=:80"
     depends_on:
       - "app"
-    restart: always
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dashboard.rule=Host(`dash.localhost`)"
