@@ -23,6 +23,7 @@ class UpdateUserRequest(BaseModel):
 
 @router.post("/users/{user_id}", summary="Updates the user information.")
 def update_user(request: UpdateUserRequest, user_id: str = Path(None, description="The unique identifier of the user."), users: UsersRepository = Depends(create_users_repository)):
+    
     """
     Update the user with the specified identifier.
     <br />Available fields:
@@ -32,6 +33,7 @@ def update_user(request: UpdateUserRequest, user_id: str = Path(None, descriptio
     - **email**: The E-Mail of the user.
     - **is_active**: A flag indicating whether the user is active or not.
     """
+
     update_data = request.dict(exclude_unset=True)
     update_data['modify_timestamp'] = datetime.utcnow()
     users.update_item(user_id, update_data)
