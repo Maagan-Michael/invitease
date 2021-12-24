@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Path
 from database import UsersRepository
 from pydantic import BaseModel
 from typing import Optional
-from utilities import *
+from core.utilities import *
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
