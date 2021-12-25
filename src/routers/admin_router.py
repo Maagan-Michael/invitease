@@ -55,8 +55,11 @@ def update_user(user_id: str = Path(None, description="The unique identifier of 
     users.update_item(user_id, update_data)
 
 
-@router.get("/eventlogs/export", summary="Gets all events in csv to admin")
+@router.get("/eventlogs/export", summary="Exports all events to csv format.")
 def export_eventlogs(event_logs: EventsLogRepository = Depends(create_eventlog_repository)):
+    """
+    Exports all events to csv format.
+    """    
     output = StringIO()
     headers = ['event_timestamp', 'event_type', 'amount_before',
                'amount_after', 'user_id', 'guard_id', 'invitation_id']
