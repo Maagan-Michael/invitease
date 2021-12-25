@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from sqlalchemy.orm import joinedload
 from sqlalchemy.sql.sqltypes import DateTime
 from fastapi import APIRouter, Depends, Path
 from starlette.responses import StreamingResponse
@@ -9,9 +9,8 @@ from typing import Optional
 from database.events_repository import EventsLogRepository
 from core.utilities import *
 import csv
-import io
 from io import StringIO
-
+from database import EventLogEntry
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 
@@ -57,26 +56,45 @@ def update_user(user_id: str = Path(None, description="The unique identifier of 
 
 
 @router.get("/eventlogs/export", summary="Gets all events in csv to admin")
-def export_eventlogs(event_logs: EventsLogRepository = Depends(create_events_entries)):
-
-    fileName = "export_" + ".csv"  # + datetime.utcnow()
-
+def export_eventlogs(event_logs: EventsLogRepository = Depends(create_eventlog_repository)):
     output = StringIO()
-    headers = ['event_timestamp', 'event_type',
-               'amount_before', 'amount_after']
-    writer = csv.DictWriter(output, fieldnames=headers, quoting=csv.QUOTE_ALL)
+    headers = ['event_timestamp', 'event_type', 'amount_before',
+               'amount_after', 'user_id', 'guard_id', 'invitation_id']
+    headers = translate_export_headers(headers, EventLogEntry)
+    writer = csv.DictWriter(
+        output,
+        fieldnames=list(headers.values()),
+        quoting=csv.QUOTE_ALL
+    )
     writer.writeheader()
-    logs = event_logs.get_all()
+    logs = event_logs.get_all((
+        joinedload(EventLogEntry.guard),
+        joinedload(EventLogEntry.user),
+        joinedload(EventLogEntry.invitation),
+    ))
     if len(logs) == 0:
         return "No Content"
 
     for row in logs:
-        writer.writerow({x: y for (x, y) in row.__dict__.items() if x in headers})
+        row_data = {
+            headers[x]: get_row_content(row.__dict__, x)
+            for x in row.__dict__.keys()
+            if x in headers
+        }
+        writer.writerow(row_data)
 
     response = StreamingResponse(iter([output.getvalue()]),
-                                 media_type="text/csv"
+                                 media_type="text/plain"
                                  )
 
-    response.headers["Content-Disposition"] = "attachment; filename=" + fileName
+    response.headers["Content-Disposition"] = "attachment; filename=event_log.csv"
 
     return response
+
+
+def get_row_content(row: dict, header: str):
+    if header == 'user_id' and row['user'] is not None:
+        return row['user'].last_name + ', ' + row['user'].first_name
+    if header == 'guard_id' and row['guard'] is not None:
+        return row['guard'].last_name + ', ' + row['guard'].first_name
+    return row[header]
