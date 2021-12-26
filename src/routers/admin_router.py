@@ -90,7 +90,7 @@ def export_eventlogs(event_logs: EventsLogRepository = Depends(create_eventlog_r
                                  media_type="text/plain"
                                  )
 
-    response.headers["Content-Disposition"] = "attachment; filename=event_log.csv"
+    response.headers["Content-Disposition"] = f"attachment; filename=event_log_{datetime.utcnow().strftime('%Y-%m-%d')}.csv"
 
     return response
 
