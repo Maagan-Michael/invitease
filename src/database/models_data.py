@@ -6,12 +6,12 @@ class DynamicObject(object):
 
 event_log_entry_info = DynamicObject(
     {
-        "event_timestamp": {"export_title": "תאריך"},
-        "event_type": {"export_title": "סוג"},
-        "amount_before": {"export_title": "כמות אחרי"},
-        "amount_after": {"export_title": "כמות לפני"},
-        "user_id": {"export_title": "משתמש"},
-        "guard_id": {"export_title": "שומר"},
-        "invitation_id": {"export_title": "הזמנה"},
+        "event_timestamp": {"export_title": "Date"},
+        "event_type": {"export_title": "Type"},
+        "amount_before": {"export_title": "Amount After"},
+        "amount_after": {"export_title": "Amount Before"},
+        "user_id": {"export_title": "User"},
+        "guard_id": {"export_title": "Guard"},
+        "invitation_id": {"export_title": "Invitation"},
     }
 )
