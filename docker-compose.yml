@@ -58,7 +58,7 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   keycloak:
-    image: bitnami/keycloak:15.1.0
+    image: bitnami/keycloak:15.1.1
     hostname: keycloak
     restart: unless-stopped
     networks:
