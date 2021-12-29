@@ -8,9 +8,8 @@ class RepositoryBase(object):
         self.primary_key = primary_key
         self.table = table
 
-    def get_all(self):
-        with Session(bind=self.connection) as session:
-            return list(session.query(self.table))
+    def get_all(self, query_options=()):
+        return self.query(lambda x: x.options(query_options))
 
     def query(self, query):
         with Session(bind=self.connection) as session:
