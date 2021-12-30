@@ -72,7 +72,6 @@ services:
       - KEYCLOAK_DATABASE_USER=invitease
       - KEYCLOAK_DATABASE_PASSWORD=password
       - KEYCLOAK_DATABASE_NAME=keycloak
-      - KEYCLOAK_FRONTEND_URL=keycloak.localhost
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.keycloak.rule=Host(`keycloak.localhost`)"
