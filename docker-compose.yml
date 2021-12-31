@@ -69,7 +69,6 @@ services:
       - db
     volumes:
       - ./init/keycloak:/opt/jboss/startup-scripts
-    #  - ./init/keycloak:/opt/init_scripts
     environment:
       - DB_VENDOR=POSTGRES
       - DB_ADDR=db
