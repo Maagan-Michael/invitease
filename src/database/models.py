@@ -32,7 +32,7 @@ class Invitation(Base):
     creation_timestamp = Column(DateTime(timezone=True), nullable=False,server_default='NOW()')
     modify_timestamp = Column(DateTime(timezone=True), nullable=False,server_default='NOW()')
     comment_for_guard = Column(String)
-    user = relationship("User", back_populates="invitations")
+    # user = relationship("User", back_populates="invitations")
 
 
 class EventLogEntry(Base):
