@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from typing import List, Optional
 
 from sqlalchemy.sql.elements import or_
 from fastapi import APIRouter
@@ -7,7 +8,9 @@ from fastapi import APIRouter, Depends, Path
 from sqlalchemy import DateTime, or_
 from pydantic import BaseModel
 from database import UsersRepository
-from utilities import *
+from core.utilities import *
+from fastapi import Query
+
 
 
 
@@ -28,12 +31,18 @@ def read_invitations(invitations: InvitationRepository = Depends(create_invitati
 
     return invitations.query(lambda x: x.filter(or_(Invitation.is_active == True, Invitation.modify_timestamp >=time_limit), Invitation.invitees_arrival_timestamp >= today, Invitation.invitees_arrival_timestamp <= tomorrow))
 
-@router.get("/user-name/{user_id}", summary="Gets all the users.")
-def read_user_name(users: UsersRepository = Depends(create_users_repository), user_id: str = None ):
-    userList:list(User) = users.query(lambda x: x.filter(User.user_id == user_id))
-    user:User = userList[0]
-    fullName:str = f'{user.first_name} {user.last_name}'
-    return  fullName
+@router.get("/user-name", summary="Gets all the users.")
+def read_user_name(users: UsersRepository = Depends(create_users_repository), user_id_list: Optional[List[str]] = Query(None)):
+    userList:list(User) = users.query(lambda x: (x.filter(User.user_id.in_( user_id_list))))
+    dictList:str = []
+    for user in userList:
+        newDict ={}
+        newDict['user_id'] = user.user_id
+        newDict['first_name'] = user.first_name
+        newDict['last_name'] = user.last_name
+        dictList.append(newDict)
+    # return {user.user_id: (user.first_name, user.last_name) for user in userList}
+    return dictList
 
 
 class UpdateInviteesRequest(BaseModel):

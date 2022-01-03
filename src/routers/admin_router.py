@@ -39,13 +39,13 @@ def update_user(request: UpdateUserRequest, user_id: str = Path(None, descriptio
     users.update_item(user_id, update_data)
 
 
-@router.post("/users/{user_id}/role/{role_type}", summary="Update the user role.")
-def update_user(user_id: str = Path(None, description="The unique identifier of the user."), role_type: str = Path(None, description="The new role to assign to the user."), users: UsersRepository = Depends(create_users_repository)):
+@router.post("/users/{user_id}/role/{user_role}", summary="Update the user role.")
+def update_user(user_id: str = Path(None, description="The unique identifier of the user."), user_role: str = Path(None, description="The new role to assign to the user."), users: UsersRepository = Depends(create_users_repository)):
     """
     Update the user role of the user with the specified identifier.
     """
     update_data = {
         'modify_timestamp': datetime.utcnow(),
-        'role_type': role_type
+        'user_role': user_role
     }
     users.update_item(user_id, update_data)
