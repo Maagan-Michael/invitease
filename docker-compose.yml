@@ -31,7 +31,7 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=admin
       - PGADMIN_LISTEN_PORT=8084
     volumes:
-      - ./db_init/servers.json:/pgadmin4/servers.json
+      - ./init/db/servers.json:/pgadmin4/servers.json
     depends_on:
       - db
     networks:
@@ -51,28 +51,34 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=invitease
       - POSTGRES_DB=invitease
+    ports:
+      - 5432:5432
     networks:
       - web
     volumes:
-      - ./db_init/baseline.sql:/docker-entrypoint-initdb.d/baseline.sql
+      - ./init/db/baseline.sql:/docker-entrypoint-initdb.d/baseline.sql
       - pg_data:/var/lib/postgresql/data
 
   keycloak:
-    image: bitnami/keycloak:15.1.0
+    image: jboss/keycloak:latest
     hostname: keycloak
     restart: unless-stopped
     networks:
       - web
     depends_on:
       - db
+    volumes:
+      - ./init/keycloak:/opt/jboss/startup-scripts
     environment:
-      - KEYCLOAK_ADMIN_USER=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
-      - KEYCLOAK_DATABASE_HOST=db
-      - KEYCLOAK_DATABASE_USER=invitease
-      - KEYCLOAK_DATABASE_PASSWORD=password
-      - KEYCLOAK_DATABASE_NAME=keycloak
-      - KEYCLOAK_FRONTEND_URL=keycloak.localhost
+      - DB_VENDOR=POSTGRES
+      - DB_ADDR=db
+      - DB_PORT=5432
+      - DB_DATABASE=keycloak
+      - DB_USER=invitease
+      - DB_SCHEMA=public
+      - DB_PASSWORD=password
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.keycloak.rule=Host(`keycloak.localhost`)"
