@@ -27,4 +27,6 @@ GROUP_ID=$(./kcadm.sh get groups -r master -q name=admin | grep -oP '(?<="id" : 
     -s 'config."access.token.claim"=true' \
     -s 'config."jsonType.label"=String' \
     -s 'config."multivalued"=true'
+./kcadm.sh create groups -r master -s name=guards
+./kcadm.sh create groups -r master -s name=users    
 ./kcadm.sh update realms/master -s attributes.frontendUrl=http://keycloak.localhost/auth) &
