@@ -2,6 +2,8 @@ from fastapi import Request, Response
 import requests
 import os
 from starlette.middleware.base import BaseHTTPMiddleware
+import inspect
+import collections
 
 
 class AuthenticationConfiguration:
@@ -19,9 +21,11 @@ class AuthenticationConfiguration:
             self.userinfo_endpoint = response.json()['userinfo_endpoint']
         else:
             raise ValueError("Failed to get user info endpoint.")
+
     @property
     def openid_external_url(self):
         return os.environ.get('IVT_OPENID_DISCOVERY_EXTERNAL_URL', self.openid_url)
+
 
 configuration = None
 
@@ -93,3 +97,54 @@ async def extract_token(request: Request, call_next):
         request.state.token = None
     response = await call_next(request)
     return response
+
+
+class SignatureFixer():
+    def _get_unique_arguments(self, arguments: list):
+        unique_arguments = collections.OrderedDict()
+
+        for argument in arguments:
+            # eliminate this check if you want the last item
+            if argument.name not in unique_arguments:
+                unique_arguments[argument.name] = argument
+
+        return list(unique_arguments.values())
+
+    def _get_arguments(self, wrapper, handler):
+        original_arguments = inspect.signature(handler).parameters.values()
+        wrapper_arguments = filter(
+            lambda p: p.kind not in (
+                inspect.Parameter.VAR_POSITIONAL, inspect.Parameter.VAR_KEYWORD),
+            inspect.signature(wrapper).parameters.values()
+        )
+        without_default_values = filter(
+            lambda x: x.default == inspect._empty, original_arguments)
+        withdefault_values = filter(
+            lambda x: x.default != inspect._empty, original_arguments)
+        return [*without_default_values, *wrapper_arguments, *withdefault_values]
+
+    def fix_signature(self, wrapper, handler):
+        arguments = self._get_arguments(wrapper, handler)
+        arguments = self._get_unique_arguments(arguments)
+        wrapper.__signature__ = inspect.Signature(
+            parameters=arguments,
+            return_annotation=inspect.signature(handler).return_annotation,
+        )
+
+
+def require_roles(roles: list):
+
+    def require_roles_decorator(handler):
+        from functools import wraps
+
+        async def wrapper(request: Request, *args,  **kwargs):
+            if any(x in roles for x in request.state.user['roles']):
+                if inspect.iscoroutinefunction(handler):
+                    result = await handler(*args, **kwargs)
+                else:
+                    result = handler(*args, **kwargs)
+                return result
+            return Response(status_code=401)
+        SignatureFixer().fix_signature(wrapper, handler)
+        return wrapper
+    return require_roles_decorator
