@@ -11,10 +11,13 @@ from core.utilities import *
 import csv
 from io import StringIO
 from database import EventLogEntry
+from core.authentication import require_roles
+
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 
 @router.get("/users", summary="Gets all the users.")
+@require_roles(roles=["admin"])
 def read_users(users: UsersRepository = Depends(create_users_repository)):
     return users.get_all()
 
@@ -28,6 +31,7 @@ class UpdateUserRequest(BaseModel):
 
 
 @router.post("/users/{user_id}", summary="Updates the user information.")
+@require_roles(roles=["admin"])
 def update_user(request: UpdateUserRequest, user_id: str = Path(None, description="The unique identifier of the user."), users: UsersRepository = Depends(create_users_repository)):
     """
     Update the user with the specified identifier.
@@ -44,6 +48,7 @@ def update_user(request: UpdateUserRequest, user_id: str = Path(None, descriptio
 
 
 @router.post("/users/{user_id}/role/{role_type}", summary="Update the user role.")
+@require_roles(roles=["admin"])
 def update_user(user_id: str = Path(None, description="The unique identifier of the user."), role_type: str = Path(None, description="The new role to assign to the user."), users: UsersRepository = Depends(create_users_repository)):
     """
     Update the user role of the user with the specified identifier.
@@ -56,10 +61,11 @@ def update_user(user_id: str = Path(None, description="The unique identifier of 
 
 
 @router.get("/eventlogs/export", summary="Exports all events to csv format.")
+@require_roles(roles=["admin"])
 def export_eventlogs(event_logs: EventsLogRepository = Depends(create_eventlog_repository)):
     """
     Exports all events to csv format.
-    """    
+    """
     output = StringIO()
     headers = ['event_timestamp', 'event_type', 'amount_before',
                'amount_after', 'user_id', 'guard_id', 'invitation_id']
