@@ -23,7 +23,7 @@ create table invitations(
 	invitation_id UUID NOT NULL DEFAULT uuid_generate_v4(),
 	user_id UUID NOT NULL REFERENCES users (user_id),
 	invitees_amount INT NOT NULL,
-	invitees_admitted INT NOT NULL,
+	invitees_admitted INT NOT NULL DEFAULT 0,
 	invitees_arrival_timestamp TIMESTAMPTZ NULL,
 	is_active BOOLEAN NOT NULL,
 	creation_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
