@@ -12,6 +12,7 @@ USER_ID=$(./kcadm.sh get users -r master --limit 1 --fields id | grep -oP '(?<="
     -s clientId=invitease \
     -s 'redirectUris=["http://invitease.localhost/*"]' \
     -s clientAuthenticatorType=client-secret -s serviceAccountsEnabled=true \
+    -s directAccessGrantsEnabled=true \
     -s secret=d0b8122f-8dfb-46b7-b68a-f5cc4e25d000 
 CLIENT_ID=$(./kcadm.sh get clients -r master -q clientId=invitease --fields id | grep -oP '(?<="id" : ")[^"]*')
 ./kcadm.sh create groups -r master -s name=admin
