@@ -14,9 +14,7 @@ def create_invitations_list():
 
 @router.get("/invitations", summary="Gets all the invitations for this user.")
 def get_invitations(invitations: InvitationRepository = Depends(create_invitations_list), user_id: str = None):
-    today = datetime.today().strftime("%Y-%m-%d")
-
-    return invitations.query(lambda x: x.filter(Invitation.user_id == user_id, Invitation.is_active == True, Invitation.invitees_arrival_timestamp >= today))
+    return invitations.get_user_relevant_invitations(user_id=user_id)
 
 
 class CreateInvitationRequest(BaseModel):
@@ -48,26 +46,18 @@ class UpdateInvitationRequest(BaseModel):
     comment_for_guard: Optional[str]
 
 
-@router.post("/edit-invitation/{invitation_id}", summary="Updates the invitation information.")
+@router.post("/edit_invitation/{invitation_id}", summary="Updates the invitation information.")
 def update_user(request: UpdateInvitationRequest, invitation: InvitationRepository = Depends(create_invitations_list),
                 invitation_id: str = Path(None, description="The unique identifier of the invitation.")):
 
+    """
+    Update the invitation with the specified identifier.
+    <br />Available fields:
+    - **invitees_amount**: The the amount of invited people.
+    - **comment_for_guard**: The comment for the guard.
+    - **is_active**: A flag indicating whether the invitation is active or not.
+     """
     update_data = request.dict(exclude_unset=True)
     update_data['modify_timestamp'] = datetime.utcnow()
     invitation.update_item(invitation_id, update_data)
 
-
-# @router.post("/edit-invitation/{invitation_id}", summary="Updates the invitation information.")
-# def update_user(request: UpdateInvitationRequest, invitation_id: str = Path(None, description="The unique identifier of the invitation."), invitation: InvitationRepository = Depends(create_invitations_list)):
-#     """
-#     Update the user with the specified identifier.
-#     <br />Available fields:
-#     - **first_name**: The first name of the user.
-#     - **last_name**: The last name of the user.
-#     - **cellular_number**: The cellular number of the user.
-#     - **email**: The E-Mail of the user.
-#     - **is_active**: A flag indicating whether the user is active or not.
-#     """
-#     update_data = request.dict(exclude_unset=True)
-#     update_data['modify_timestamp'] = datetime.utcnow()
-#     invitation.update_item(invitation_id, update_data)
