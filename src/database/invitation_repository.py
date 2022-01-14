@@ -9,7 +9,7 @@ class InvitationRepository(RepositoryBase):
     def __init__(self, connection) -> None:
         super().__init__(connection, Invitation, Invitation.invitation_id)
 
-    def get_invitations_from_constrains(self):
+    def get_pending_invitations(self):
         today = datetime.today().strftime("%Y-%m-%d")
         tomorrowRaw: datetime = datetime.today() + timedelta(days=2)
         tomorrow = tomorrowRaw.strftime("%Y-%m-%d")
