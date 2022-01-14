@@ -51,7 +51,7 @@ setState(() {
       var response = await http.get(
         Uri.http(
           'invitease.localhost',
-          '/guard/user-names',
+          '/guard/user_names',
           {'user_id_list': userIdList},
         ),
         headers: {'Content-Type': 'application/json'},
