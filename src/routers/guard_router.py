@@ -18,7 +18,7 @@ router = APIRouter(prefix="/guard", tags=["guard"])
 
 @router.get("/invitations", summary="Gets all the active invitations.")
 def read_invitations(invitations: InvitationRepository = Depends(create_invitations_list)):
-    return invitations.get_invitations_from_constrains()
+    return invitations.get_pendind_invitations()
 
 @router.get("/user_names", summary="Gets all the user names from a list of user-id's  ")
 def read_user_names(users: UsersRepository = Depends(create_users_repository),
