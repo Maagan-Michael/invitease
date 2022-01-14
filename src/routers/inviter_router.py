@@ -44,7 +44,7 @@ class UpdateInvitationRequest(BaseModel):
 
 
 @router.post("/edit_invitation/{invitation_id}", summary="Updates the invitation information.")
-def update_user(request: UpdateInvitationRequest, invitation: InvitationRepository = Depends(create_invitations_list),
+def update_invitation(request: UpdateInvitationRequest, invitation: InvitationRepository = Depends(create_invitations_list),
                 invitation_id: str = Path(None, description="The unique identifier of the invitation.")):
 
     """
