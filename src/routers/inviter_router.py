@@ -3,13 +3,10 @@ from database import InvitationRepository, create_connection, models, Invitation
 from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
+from core.utilities import *
 
 router = APIRouter(prefix="/inviter", tags=["inviter"])
 
-
-def create_invitations_list():
-    connection = create_connection()
-    return InvitationRepository(connection)
 
 
 @router.get("/invitations", summary="Gets all the invitations for this user.")

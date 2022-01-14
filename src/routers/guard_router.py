@@ -10,15 +10,10 @@ from database import UsersRepository
 from core.utilities import *
 from fastapi import Query
 
-
-
-
 router = APIRouter(prefix="/guard", tags=["guard"])
 
 
-def create_invitations_list():
-    connection = create_connection()
-    return InvitationRepository(connection)
+
 
 
 @router.get("/invitations", summary="Gets all the active invitations.")
