@@ -1,7 +1,4 @@
 from database import UsersRepository, EventLogRepository, create_connection, InvitationRepository
-from fastapi import Request, Response
-import requests
-
 
 allowed_paths = ('/docs', '/openapi.json')
 

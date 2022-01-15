@@ -1,17 +1,17 @@
-from datetime import datetime
-from sqlalchemy.orm import joinedload
-from sqlalchemy.sql.sqltypes import DateTime
-from fastapi import APIRouter, Depends, Path
-from starlette.responses import StreamingResponse
-from database import UsersRepository
-from pydantic import BaseModel
-from typing import Optional
-from database.events_repository import EventsLogRepository
-from core.utilities import *
 import csv
+from datetime import datetime
 from io import StringIO
-from database import EventLogEntry
+from typing import Optional
+
 from core.authentication import require_roles
+from core.utilities import *
+from database import EventLogEntry
+from database import UsersRepository
+from database.events_repository import EventsLogRepository
+from fastapi import APIRouter, Depends, Path
+from pydantic import BaseModel
+from sqlalchemy.orm import joinedload
+from starlette.responses import StreamingResponse
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -32,8 +32,9 @@ class UpdateUserRequest(BaseModel):
 
 @router.post("/users/{user_id}", summary="Updates the user information.")
 @require_roles(roles=["admin"])
-def update_user(request: UpdateUserRequest, user_id: str = Path(None, description="The unique identifier of the user."), users: UsersRepository = Depends(create_users_repository)):
-
+def update_user(request: UpdateUserRequest,
+                user_id: str = Path(None, description="The unique identifier of the user."),
+                users: UsersRepository = Depends(create_users_repository)):
     """
     Update the user with the specified identifier.
     <br />Available fields:
@@ -51,7 +52,9 @@ def update_user(request: UpdateUserRequest, user_id: str = Path(None, descriptio
 
 @router.post("/users/{user_id}/role/{user_role}", summary="Update the user role.")
 @require_roles(roles=["admin"])
-def update_user(user_id: str = Path(None, description="The unique identifier of the user."), user_role: str = Path(None, description="The new role to assign to the user."), users: UsersRepository = Depends(create_users_repository)):
+def update_user(user_id: str = Path(None, description="The unique identifier of the user."),
+                user_role: str = Path(None, description="The new role to assign to the user."),
+                users: UsersRepository = Depends(create_users_repository)):
     """
     Update the user role of the user with the specified identifier.
     """
@@ -98,7 +101,8 @@ def export_eventlogs(event_logs: EventsLogRepository = Depends(create_eventlog_r
                                  media_type="text/plain"
                                  )
 
-    response.headers["Content-Disposition"] = f"attachment; filename=event_log_{datetime.utcnow().strftime('%Y-%m-%d')}.csv"
+    response.headers[
+        "Content-Disposition"] = f"attachment; filename=event_log_{datetime.utcnow().strftime('%Y-%m-%d')}.csv"
 
     return response
 

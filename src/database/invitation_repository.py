@@ -1,8 +1,8 @@
-from database.repository_base import RepositoryBase
-from database.models import Invitation
 from datetime import datetime, timedelta
-from sqlalchemy import DateTime, or_
 
+from database.models import Invitation
+from database.repository_base import RepositoryBase
+from sqlalchemy import or_
 
 
 class InvitationRepository(RepositoryBase):
@@ -13,14 +13,14 @@ class InvitationRepository(RepositoryBase):
         today = datetime.today().strftime("%Y-%m-%d")
         tomorrowRaw: datetime = datetime.today() + timedelta(days=2)
         tomorrow = tomorrowRaw.strftime("%Y-%m-%d")
-        time_limit = (datetime.utcnow()-timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M")
+        time_limit = (datetime.utcnow() - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M")
 
         return self.query(lambda x: x.filter(
-            or_(Invitation.is_active == True, Invitation.modify_timestamp >=time_limit),
+            or_(Invitation.is_active == True, Invitation.modify_timestamp >= time_limit),
             Invitation.invitees_arrival_timestamp >= today,
             Invitation.invitees_arrival_timestamp <= tomorrow))
 
-    def get_user_relevant_invitations(self,user_id: str):
+    def get_user_relevant_invitations(self, user_id: str):
         today = datetime.today().strftime("%Y-%m-%d")
 
         return self.query(lambda x: x.filter(

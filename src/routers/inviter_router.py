@@ -1,16 +1,17 @@
-from fastapi import APIRouter, Depends, Path
-from database import InvitationRepository, create_connection, models, Invitation
 from datetime import datetime
-from pydantic import BaseModel
 from typing import Optional
+
 from core.utilities import *
+from database import InvitationRepository, create_connection, models, Invitation
+from fastapi import APIRouter, Depends, Path
+from pydantic import BaseModel
 
 router = APIRouter(prefix="/inviter", tags=["inviter"])
 
 
-
 @router.get("/invitations", summary="Gets all the invitations for this user.")
-def get_invitations(invitations: InvitationRepository = Depends(create_invitations_list), user_id: str = None):
+def get_invitations(invitations: InvitationRepository = Depends(create_invitations_list),
+                    user_id: str = None):
     return invitations.get_user_relevant_invitations(user_id=user_id)
 
 
@@ -25,7 +26,6 @@ def create_invitation(request: CreateInvitationRequest,
                       invitations: InvitationRepository = Depends(
                           create_invitations_list),
                       user_id: str = None):
-
     new_invitation = Invitation(
         user_id=user_id,
         invitees_amount=request.invitees_amount,
@@ -44,9 +44,10 @@ class UpdateInvitationRequest(BaseModel):
 
 
 @router.post("/edit_invitation/{invitation_id}", summary="Updates the invitation information.")
-def update_invitation(request: UpdateInvitationRequest, invitation: InvitationRepository = Depends(create_invitations_list),
-                invitation_id: str = Path(None, description="The unique identifier of the invitation.")):
-
+def update_invitation(request: UpdateInvitationRequest,
+                      invitation: InvitationRepository = Depends(create_invitations_list),
+                      invitation_id: str = Path(None,
+                                                description="The unique identifier of the invitation.")):
     """
     Update the invitation with the specified identifier.
     <br />Available fields:
@@ -57,4 +58,3 @@ def update_invitation(request: UpdateInvitationRequest, invitation: InvitationRe
     update_data = request.dict(exclude_unset=True)
     update_data['modify_timestamp'] = datetime.utcnow()
     invitation.update_item(invitation_id, update_data)
-
