@@ -1,8 +1,4 @@
-from database.events_repository import EventsLogRepository
-from starlette.middleware.base import BaseHTTPMiddleware
-from database import UsersRepository, EventLogRepository, create_connection
-from fastapi import Request, Response
-import requests
+from database import UsersRepository, EventLogRepository, create_connection, InvitationRepository
 
 allowed_paths = ('/docs', '/openapi.json')
 
@@ -15,6 +11,11 @@ def create_users_repository():
 def create_eventlog_repository():
     connection = create_connection()
     return EventLogRepository(connection)
+
+
+def create_invitations_list():
+    connection = create_connection()
+    return InvitationRepository(connection)
 
 
 def translate_export_headers(headers: list, model) -> dict:
