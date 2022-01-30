@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
-import 'package:webtest1/helper_methods.dart';
-import 'package:webtest1/models/invitation/invitation.dart';
-import 'package:webtest1/screens/inviter/invitation_time.dart';
-import 'package:webtest1/screens/inviter/edit_invitation.dart';
-import 'package:webtest1/screens/inviter/invitation_card.dart';
-import 'package:webtest1/widgets/custom_button.dart';
+import 'package:invitease/helper_methods.dart';
+import 'package:invitease/models/invitation/invitation.dart';
+import 'package:invitease/screens/inviter/invitation_time.dart';
+import 'package:invitease/screens/inviter/edit_invitation.dart';
+import 'package:invitease/screens/inviter/invitation_card.dart';
+import 'package:invitease/widgets/custom_button.dart';
 
 class InviterScreen extends StatefulWidget {
   const InviterScreen({Key? key}) : super(key: key);

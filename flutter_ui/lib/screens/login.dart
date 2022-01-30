@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:webtest1/screens/inviter/inviter.dart';
+import 'package:invitease/screens/inviter/inviter.dart';
 
 import 'admin.dart';
 import 'guard.dart';

@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:webtest1/helper_methods.dart';
-import 'package:webtest1/models/invitation/invitation.dart';
+import 'package:invitease/helper_methods.dart';
+import 'package:invitease/models/invitation/invitation.dart';
 
 import 'basic_text_cell.dart';
 

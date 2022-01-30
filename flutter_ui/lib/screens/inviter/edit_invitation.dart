@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:webtest1/helper_methods.dart';
-import 'package:webtest1/screens/inviter/number_of_invitees_box.dart';
+import 'package:invitease/helper_methods.dart';
+import 'package:invitease/screens/inviter/number_of_invitees_box.dart';
 
 class EditInvitationDialog extends StatefulWidget {
   const EditInvitationDialog(

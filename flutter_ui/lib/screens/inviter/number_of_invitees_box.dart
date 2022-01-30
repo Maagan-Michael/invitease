@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
-import 'package:webtest1/providers/new_invitation_provider.dart';
+import 'package:invitease/providers/new_invitation_provider.dart';
 
 class NumberOfInviteesBox extends StatelessWidget {
   const NumberOfInviteesBox({Key? key}) : super(key: key);

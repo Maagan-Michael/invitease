@@ -5,9 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/src/provider.dart';
-import 'package:webtest1/providers/new_invitation_provider.dart';
-import 'package:webtest1/screens/inviter/inviter.dart';
-import 'package:webtest1/screens/inviter/select_time.dart';
+import 'package:invitease/providers/new_invitation_provider.dart';
+import 'package:invitease/screens/inviter/inviter.dart';
+import 'package:invitease/screens/inviter/select_time.dart';
 import 'global_variable.dart';
 
 class HelperMethods {

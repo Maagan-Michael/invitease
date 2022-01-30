@@ -2,11 +2,11 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
-import 'package:webtest1/helper_methods.dart';
-import 'package:webtest1/providers/new_invitation_provider.dart';
-import 'package:webtest1/screens/inviter/invitation_details.dart';
-import 'package:webtest1/screens/inviter/select_time.dart';
-import 'package:webtest1/widgets/custom_button.dart';
+import 'package:invitease/helper_methods.dart';
+import 'package:invitease/providers/new_invitation_provider.dart';
+import 'package:invitease/screens/inviter/invitation_details.dart';
+import 'package:invitease/screens/inviter/select_time.dart';
+import 'package:invitease/widgets/custom_button.dart';
 
 class InvitationTime extends StatefulWidget {
   static const screenId = '/arrival_time_screen';

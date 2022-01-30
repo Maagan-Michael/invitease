@@ -2,10 +2,10 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
-import 'package:webtest1/helper_methods.dart';
-import 'package:webtest1/providers/new_invitation_provider.dart';
-import 'package:webtest1/screens/inviter/number_of_invitees_box.dart';
-import 'package:webtest1/widgets/custom_button.dart';
+import 'package:invitease/helper_methods.dart';
+import 'package:invitease/providers/new_invitation_provider.dart';
+import 'package:invitease/screens/inviter/number_of_invitees_box.dart';
+import 'package:invitease/widgets/custom_button.dart';
 
 import 'inviter.dart';
 

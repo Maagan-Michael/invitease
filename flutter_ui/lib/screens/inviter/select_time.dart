@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
 import 'package:provider/src/provider.dart';
-import 'package:webtest1/helper_methods.dart';
-import 'package:webtest1/providers/new_invitation_provider.dart';
+import 'package:invitease/helper_methods.dart';
+import 'package:invitease/providers/new_invitation_provider.dart';
 
 enum TimeRange{
   morning,

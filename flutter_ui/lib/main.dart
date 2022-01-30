@@ -2,14 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:webtest1/providers/new_invitation_provider.dart';
-import 'package:webtest1/screens/admin.dart';
-import 'package:webtest1/screens/guard.dart';
-import 'package:webtest1/screens/inviter/invitation_details.dart';
-import 'package:webtest1/screens/inviter/invitation_details.dart';
-import 'package:webtest1/screens/inviter/invitation_time.dart';
-import 'package:webtest1/screens/inviter/inviter.dart';
-import 'package:webtest1/screens/login.dart';
+import 'package:invitease/providers/new_invitation_provider.dart';
+import 'package:invitease/screens/admin.dart';
+import 'package:invitease/screens/guard.dart';
+import 'package:invitease/screens/inviter/invitation_details.dart';
+import 'package:invitease/screens/inviter/invitation_details.dart';
+import 'package:invitease/screens/inviter/invitation_time.dart';
+import 'package:invitease/screens/inviter/inviter.dart';
+import 'package:invitease/screens/login.dart';
 
 void main() {
   runApp(MultiProvider(

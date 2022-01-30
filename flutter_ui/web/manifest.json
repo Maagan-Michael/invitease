@@ -1,6 +1,6 @@
 {
-    "name": "webtest1",
-    "short_name": "webtest1",
+    "name": "invitease",
+    "short_name": "invitease",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:webtest1/helper_methods.dart';
-import 'package:webtest1/models/invitation/invitation.dart';
+import 'package:invitease/helper_methods.dart';
+import 'package:invitease/models/invitation/invitation.dart';
 
 import 'edit_invitation.dart';
 
