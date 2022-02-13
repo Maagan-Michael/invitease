@@ -1,0 +1,37 @@
+# Install Operating system and dependencies
+FROM ubuntu:21.04 as builder
+
+RUN echo 'tzdata tzdata/Areas select Asia' | debconf-set-selections && \
+    echo 'tzdata tzdata/Zones/Asia select Jerusalem' | debconf-set-selections
+ENV DEBIAN_FRONTEND="noninteractive"
+
+RUN apt-get update && \
+    apt-get install -y curl git \
+    wget unzip libgconf-2-4 gdb \
+    libstdc++6 libglu1-mesa \
+    fonts-droid-fallback \
+    lib32stdc++6 python3 && \
+    apt-get clean
+
+# download Flutter SDK from Flutter Github repo
+RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
+
+# Set flutter environment path
+ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
+
+# Run flutter doctor
+RUN flutter doctor && \
+    flutter channel beta && \
+    flutter upgrade && \
+    flutter config --enable-web
+
+# Copy files to container and build
+WORKDIR /app/
+COPY . /app/
+RUN flutter build web
+
+FROM nginx:alpine
+
+COPY --from=builder /app/build/web/* /usr/share/nginx/html/
+
+ENTRYPOINT [ "/usr/sbin/nginx", "-g", "daemon off;" ]

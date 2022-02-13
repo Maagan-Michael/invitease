@@ -21,7 +21,7 @@ class _GuardScreenState extends State<GuardScreen> {
 
   Future<void> fetchInvitations() async {
     var response = await http.get(
-      Uri.parse('http://invitease.localhost/guard/invitations'),
+      Uri.parse('http://backend.localhost/guard/invitations'),
     );
     var jsonList = jsonDecode(utf8.decode(response.bodyBytes)) as List;
     invitations = [];
@@ -50,7 +50,7 @@ setState(() {
     if (userIdList.isNotEmpty) {
       var response = await http.get(
         Uri.http(
-          'invitease.localhost',
+          'backend.localhost',
           '/guard/user_names',
           {'user_id_list': userIdList},
         ),

@@ -50,7 +50,7 @@ class HelperMethods {
     };
     updateMap.removeWhere((key, value) => value == null || value == 'null');
     var response = await http.post(Uri.http(
-      'invitease.localhost',
+      'backend.localhost',
       'inviter/edit_invitation/$invitationId',
     ), headers: {'Content-Type': 'application/json'},
         encoding: Encoding.getByName('UTF-8'),
@@ -64,7 +64,7 @@ class HelperMethods {
     Map<String, dynamic> updateMap = {'invitees_admitted': '$newAmount'};
     updateMap.removeWhere((key, value) => value == null || value == 'null');
     var response = await http.post(
-        Uri.http('invitease.localhost', 'guard/change_admitted/$invitationId',
+        Uri.http('backend.localhost', 'guard/change_admitted/$invitationId',
             updateMap),
         headers: {'Content-Type': 'application/json'},
         encoding: Encoding.getByName('UTF-8'),
@@ -113,7 +113,7 @@ DateTime upcommingWeekDayDate =  DateTime(now.year, now.month, now.day);
 try {
   var response = await http.post(
     //todo change to Uri.http
-      Uri.parse('http://invitease.localhost/inviter/invite?user_id=$userId'),
+      Uri.parse('http://backend.localhost/inviter/invite?user_id=$userId'),
       body: jsonEncode(
         {
           'user_id': userId,

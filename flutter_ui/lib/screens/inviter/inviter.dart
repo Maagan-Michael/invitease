@@ -27,7 +27,7 @@ class _InviterScreenState extends State<InviterScreen> {
   void fetchInvitations(String userId) async {
     var response = await http.get(
       Uri.parse(
-          'http://invitease.localhost/inviter/invitations?user_id=$userId'),
+          'http://backend.localhost/inviter/invitations?user_id=$userId'),
     );
     var jsonList = jsonDecode(utf8.decode(response.bodyBytes)) as List;
     myInvitations = [];

@@ -42,7 +42,7 @@ class _EditInvitationDialogState extends State<EditInvitationDialog> {
   Future<void> deleteInvitation(String invitationId) async {
     var response = await http.post(
       Uri.parse(
-          'http://invitease.localhost/inviter/edit_invitation/$invitationId'),
+          'http://backend.localhost/inviter/edit_invitation/$invitationId'),
       body: jsonEncode({'is_active': 'false'}),
       headers: {'Content-Type': 'application/json'}
     );

@@ -17,7 +17,7 @@ class _AdminScreenState extends State<AdminScreen> {
 
   void fetchUsers() async {
     var response = await http.get(
-      Uri.parse('http://invitease.localhost/admin/users'),
+      Uri.parse('http://backend.localhost/admin/users'),
     );
     var jsonList = jsonDecode(utf8.decode(response.bodyBytes)) as List;
 
@@ -32,7 +32,7 @@ class _AdminScreenState extends State<AdminScreen> {
 
   Future<void> updateUserRole(String userId, String role) async {
     var response = await http.post(
-      Uri.parse('http://invitease.localhost/admin/users/$userId/role/$role'),
+      Uri.parse('http://backend.localhost/admin/users/$userId/role/$role'),
     );
   }
 

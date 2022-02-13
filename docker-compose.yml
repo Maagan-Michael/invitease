@@ -1,7 +1,7 @@
 version: "3.9"
 services:
-  app:
-    hostname: app
+  backend:
+    hostname: backend
     build: .
     restart: unless-stopped
     volumes:
@@ -17,10 +17,33 @@ services:
       #  IVT_ENABLE_AUTH: 'true'
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.invitease.rule=Host(`invitease.localhost`)"
-      - "traefik.http.routers.invitease.entrypoints=web"
+      - "traefik.http.routers.backend.rule=Host(`backend.localhost`)"
+      - "traefik.http.routers.backend.entrypoints=web"
       - "traefik.docker.network=web"
-      - "traefik.http.services.invitease.loadbalancer.server.port=8090"
+      - "traefik.http.services.backend.loadbalancer.server.port=8090"
+
+  frontend:
+    hostname: frontend
+    build:
+      context: ./flutter_ui
+      dockerfile: ../Dockerfile.frontend
+    restart: unless-stopped
+    networks:
+      - web
+    volumes:
+      - ./init/http:/etc/nginx/templates
+    depends_on:
+      - "backend"
+    environment:
+      - NGINX_PORT=8082
+      - NGINX_HOSTNAME=invitease.localhost
+    entrypoint: /bin/ash -c "envsubst '$$NGINX_PORT $$NGINX_HOSTNAME' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'" 
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`invitease.localhost`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.docker.network=web"
+      - "traefik.http.services.frontend.loadbalancer.server.port=8082"
 
   dbmanager:
     image: dpage/pgadmin4
@@ -51,8 +74,6 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=invitease
       - POSTGRES_DB=invitease
-    ports:
-      - 5432:5432
     networks:
       - web
     volumes:
@@ -96,7 +117,7 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
     depends_on:
-      - "app"
+      - frontend
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -115,4 +136,4 @@ networks:
     driver: bridge
 
 volumes:
-  pg_data:        
+  pg_data:
