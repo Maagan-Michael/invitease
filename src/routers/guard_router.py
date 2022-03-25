@@ -16,18 +16,14 @@ def read_invitations(invitations: InvitationRepository = Depends(create_invitati
     return invitations.get_pendind_invitations()
 
 
-@router.get("/user_names", summary="Gets all the user names from a list of user-id's  ")
-def read_user_names(users: UsersRepository = Depends(create_users_repository),
-                    user_id_list: Optional[List[str]] = Query(None)):
-    userList: list(User) = users.get_users_from_id_list(user_id_list=user_id_list)
-    dictList: str = []
-    for user in userList:
-        newDict = {}
-        newDict['user_id'] = user.user_id
-        newDict['first_name'] = user.first_name
-        newDict['last_name'] = user.last_name
-        dictList.append(newDict)
-    return dictList
+@router.get("/user_names", summary="Gets user names by their id.")
+def get_user_names(users: UsersRepository = Depends(create_users_repository),
+                    user_ids: Optional[List[str]] = Query([])):
+    users: list(User) = users.get_user_by_id(user_ids=user_ids)
+    def to_map(user: User) -> dict:
+        return {'user_id': user.user_id, 'first_name': user.first_name, 'last_name': user.last_name}
+    result = [to_map(x) for x in users]
+    return result
 
 
 class UpdateInviteesRequest(BaseModel):
