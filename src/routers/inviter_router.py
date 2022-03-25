@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from core.utilities import *
-from database import InvitationRepository, create_connection, models, Invitation
+from database import InvitationRepository, Invitation
 from fastapi import APIRouter, Depends, Path
 from pydantic import BaseModel
 
