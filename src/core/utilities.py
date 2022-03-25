@@ -3,17 +3,17 @@ from database import UsersRepository, EventLogRepository, create_connection, Inv
 allowed_paths = ('/docs', '/openapi.json')
 
 
-def create_users_repository():
+def create_users_repository() -> UsersRepository:
     connection = create_connection()
     return UsersRepository(connection)
 
 
-def create_eventlog_repository():
+def create_eventlog_repository() -> EventLogRepository:
     connection = create_connection()
     return EventLogRepository(connection)
 
 
-def create_invitation_repository():
+def create_invitation_repository() -> InvitationRepository:
     connection = create_connection()
     return InvitationRepository(connection)
 
