@@ -12,7 +12,7 @@ router = APIRouter(prefix="/guard", tags=["guard"])
 
 
 @router.get("/invitations", summary="Gets all the active invitations.")
-def read_invitations(invitations: InvitationRepository = Depends(create_invitations_list)):
+def read_invitations(invitations: InvitationRepository = Depends(create_invitation_repository)):
     return invitations.get_pendind_invitations()
 
 
@@ -36,7 +36,7 @@ class UpdateInviteesRequest(BaseModel):
 
 @router.post("/change_admitted/{invitation_id}", summary="Updates the invitation information.")
 def change_admitted(request: UpdateInviteesRequest,
-                    invitation: InvitationRepository = Depends(create_invitations_list),
+                    invitation: InvitationRepository = Depends(create_invitation_repository),
                     invitation_id: str = Path(None,
                                               description="The unique identifier of the invitation."), ):
     update_data = request.dict(exclude_unset=True)

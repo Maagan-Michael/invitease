@@ -13,7 +13,7 @@ def create_eventlog_repository():
     return EventLogRepository(connection)
 
 
-def create_invitations_list():
+def create_invitation_repository():
     connection = create_connection()
     return InvitationRepository(connection)
 

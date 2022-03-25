@@ -10,7 +10,7 @@ router = APIRouter(prefix="/inviter", tags=["inviter"])
 
 
 @router.get("/invitations", summary="Gets all the invitations for this user.")
-def get_invitations(invitations: InvitationRepository = Depends(create_invitations_list),
+def get_invitations(invitations: InvitationRepository = Depends(create_invitation_repository),
                     user_id: str = None):
     return invitations.get_user_relevant_invitations(user_id=user_id)
 
@@ -24,7 +24,7 @@ class CreateInvitationRequest(BaseModel):
 @router.post("/invite", summary="Creates a new invitation for this user.")
 def create_invitation(request: CreateInvitationRequest,
                       invitations: InvitationRepository = Depends(
-                          create_invitations_list),
+                          create_invitation_repository),
                       user_id: str = None):
     new_invitation = Invitation(
         user_id=user_id,
@@ -45,7 +45,7 @@ class UpdateInvitationRequest(BaseModel):
 
 @router.post("/edit_invitation/{invitation_id}", summary="Updates the invitation information.")
 def update_invitation(request: UpdateInvitationRequest,
-                      invitation: InvitationRepository = Depends(create_invitations_list),
+                      invitation: InvitationRepository = Depends(create_invitation_repository),
                       invitation_id: str = Path(None,
                                                 description="The unique identifier of the invitation.")):
     """
