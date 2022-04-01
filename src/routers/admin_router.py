@@ -18,7 +18,7 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 @router.get("/users", summary="Gets all the users.")
 @require_roles(roles=["admin"])
-def read_users(users: UsersRepository = Depends(create_users_repository)):
+def read_users(users: KeycloakUserRepository = Depends(create_users_repository)):
     return users.get_all()
 
 
@@ -34,7 +34,7 @@ class UpdateUserRequest(BaseModel):
 @require_roles(roles=["admin"])
 def update_user(request: UpdateUserRequest,
                 user_id: str = Path(None, description="The unique identifier of the user."),
-                users: UsersRepository = Depends(create_users_repository)):
+                users: KeycloakUserRepository = Depends(create_users_repository)):
     """
     Update the user with the specified identifier.
     <br />Available fields:
@@ -54,7 +54,7 @@ def update_user(request: UpdateUserRequest,
 @require_roles(roles=["admin"])
 def update_user(user_id: str = Path(None, description="The unique identifier of the user."),
                 user_role: str = Path(None, description="The new role to assign to the user."),
-                users: UsersRepository = Depends(create_users_repository)):
+                users: KeycloakUserRepository = Depends(create_users_repository)):
     """
     Update the user role of the user with the specified identifier.
     """
