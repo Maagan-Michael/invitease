@@ -32,7 +32,7 @@ class UpdateUserRequest(BaseModel):
 
 @router.post("/users/{user_id}", summary="Updates the user information.")
 @require_roles(roles=["admin"])
-def update_user(request: UpdateUserRequest,
+def set_user_role(update_request: UpdateUserRequest,
                 user_id: str = Path(None, description="The unique identifier of the user."),
                 users: KeycloakUserRepository = Depends(create_users_repository)):
     """
@@ -45,14 +45,14 @@ def update_user(request: UpdateUserRequest,
     - **is_active**: A flag indicating whether the user is active or not.
     """
 
-    update_data = request.dict(exclude_unset=True)
+    update_data = update_request.dict(exclude_unset=True)
     update_data['modify_timestamp'] = datetime.utcnow()
     users.update_item(user_id, update_data)
 
 
 @router.post("/users/{user_id}/role/{user_role}", summary="Update the user role.")
 @require_roles(roles=["admin"])
-def update_user(user_id: str = Path(None, description="The unique identifier of the user."),
+def set_user_role(user_id: str = Path(None, description="The unique identifier of the user."),
                 user_role: str = Path(None, description="The new role to assign to the user."),
                 users: KeycloakUserRepository = Depends(create_users_repository)):
     """

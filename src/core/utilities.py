@@ -1,11 +1,14 @@
-from database import UsersRepository, EventLogRepository, create_connection, InvitationRepository
+from fastapi import Request
+from database import EventLogRepository, create_connection, InvitationRepository
+from keycloak import KeycloakUserRepository
 
 allowed_paths = ('/docs', '/openapi.json')
 
 
-def create_users_repository() -> UsersRepository:
-    connection = create_connection()
-    return UsersRepository(connection)
+def create_users_repository(request: Request) -> KeycloakUserRepository:
+    #connection = create_connection()
+    # return UsersRepository(connection)
+    return KeycloakUserRepository(request.state.token, "http://keycloak:8080/auth")
 
 
 def create_eventlog_repository() -> EventLogRepository:
