@@ -36,7 +36,7 @@ class KeycloakUserRepository(KeycloakClientBase):
     def get_all(self) -> list[User]:
         return [json_to_user(x) for x in self._get_all_users()]
 
-    def get_user_by_id(self, user_ids: list[str] = []) -> list[User]:
+    def get_users_by_id(self, user_ids: list[str] = []) -> list[User]:
         if len(user_ids) > 0:
             users = self._get_users_by_id(user_ids)
         else:
