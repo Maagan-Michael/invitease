@@ -8,20 +8,17 @@ from sqlalchemy.types import DateTime
 Base = declarative_base()
 
 
-class User(Base):
-    __tablename__ = 'users'
-
-    user_id = Column(UUID(as_uuid=True), primary_key=True, nullable=False,
-                     server_default='uuid_generate_v4()')
-    first_name = Column(String(255), nullable=False)
-    last_name = Column(String(255), nullable=False)
-    cellular_number = Column(String)
-    email = Column(String(255))
-    user_role = Column(String, nullable=False)
-    creation_timestamp = Column(DateTime(timezone=True), nullable=False, server_default='NOW()')
-    modify_timestamp = Column(DateTime(timezone=True), nullable=False, server_default='NOW()')
-    is_active = Column(Boolean, nullable=False)
-    invitations = relationship("Invitation", back_populates="user")
+class User(object):
+    def __init__(self, **kargs) -> None:
+        self.user_id = kargs.get('user_id')
+        self.first_name = kargs.get('first_name')
+        self.last_name = kargs.get('last_name')
+        self.cellular_number = kargs.get('cellular_number')
+        self.email = kargs.get('email')
+        self.user_role = kargs.get('user_role')
+        self.creation_timestamp = kargs.get('creation_timestamp')
+        self.modify_timestamp = kargs.get('modify_timestamp')
+        self.is_active = kargs.get('is_active')
 
 
 class Invitation(Base):
@@ -29,7 +26,7 @@ class Invitation(Base):
 
     invitation_id = Column(
         UUID(as_uuid=True), primary_key=True, nullable=False, server_default='uuid_generate_v4()')
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.user_id"))
+    user_id = Column(UUID(as_uuid=True))
     invitees_amount = Column(Integer, nullable=False)
     invitees_admitted = Column(Integer, nullable=False, server_default="0")
     invitees_arrival_timestamp = Column(DateTime(timezone=True), nullable=False)
@@ -37,7 +34,6 @@ class Invitation(Base):
     creation_timestamp = Column(DateTime(timezone=True), nullable=False, server_default='NOW()')
     modify_timestamp = Column(DateTime(timezone=True), nullable=False, server_default='NOW()')
     comment_for_guard = Column(String)
-    user = relationship("User", back_populates="invitations")
 
 
 class EventLogEntry(Base):
@@ -59,21 +55,15 @@ class EventLogEntry(Base):
     amount_after = Column(Integer, info=event_log_entry_info.amount_after)
     user_id = Column(
         UUID(as_uuid=True),
-        ForeignKey("users.user_id"),
         info=event_log_entry_info.user_id
     )
     guard_id = Column(
         UUID(as_uuid=True),
-        ForeignKey("users.user_id"),
         info=event_log_entry_info.guard_id
     )
     invitation_id = Column(
         UUID(as_uuid=True),
-        ForeignKey("invitations.user_id"),
+        ForeignKey("invitations.invitation_id"),
         info=event_log_entry_info.invitation_id
     )
-    user = relationship(
-        "User", primaryjoin="(EventLogEntry.user_id == User.user_id)")
-    guard = relationship(
-        "User", primaryjoin="(EventLogEntry.guard_id == User.user_id)")
     invitation = relationship("Invitation")
