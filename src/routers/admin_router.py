@@ -32,7 +32,7 @@ class UpdateUserRequest(BaseModel):
 
 @router.post("/users/{user_id}", summary="Updates the user information.")
 @require_roles(roles=["admin"])
-def set_user_role(update_request: UpdateUserRequest,
+def update_user(update_request: UpdateUserRequest,
                   user_id: str = Path(
                       None, description="The unique identifier of the user."),
                   users: KeycloakUserRepository = Depends(create_users_repository)):
