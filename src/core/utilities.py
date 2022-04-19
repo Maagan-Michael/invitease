@@ -6,8 +6,6 @@ allowed_paths = ('/docs', '/openapi.json')
 
 
 def create_users_repository(request: Request) -> KeycloakUserRepository:
-    #connection = create_connection()
-    # return UsersRepository(connection)
     return KeycloakUserRepository(request.state.token, "http://keycloak:8080/auth")
 
 

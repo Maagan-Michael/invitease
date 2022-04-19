@@ -8,7 +8,6 @@ from uuid import UUID
 from core.authentication import require_roles
 from core.utilities import *
 from database import EventLogEntry
-from database import UsersRepository
 from database.events_repository import EventsLogRepository
 from fastapi import APIRouter, Depends, Path
 from pydantic import BaseModel

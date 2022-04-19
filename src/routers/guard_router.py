@@ -3,7 +3,6 @@ from typing import List, Optional
 
 from core.utilities import *
 from database import InvitationRepository, User
-from database import UsersRepository
 from fastapi import APIRouter, Depends, Path
 from fastapi import Query
 from pydantic import BaseModel
