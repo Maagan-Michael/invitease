@@ -60,11 +60,7 @@ def set_user_role(user_id: str = Path(None, description="The unique identifier o
     """
     Update the user role of the user with the specified identifier.
     """
-    update_data = {
-        'modify_timestamp': datetime.utcnow(),
-        'user_role': user_role
-    }
-    users.update_item(user_id, update_data)
+    users.set_user_role(user_id, user_role)
 
 
 @ router.get("/eventlogs/export", summary="Exports all events to csv format.")

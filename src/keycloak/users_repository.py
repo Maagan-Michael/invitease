@@ -1,8 +1,7 @@
-from cgi import print_form
 from requests import request, Response
 from keycloak.convertions import json_to_user
 from database.models import User
-import json
+
 
 class KeycloakClientBase:
     def __init__(self, access_token: str, base_url: str) -> None:
@@ -21,6 +20,9 @@ class KeycloakClientBase:
     def _get(self, url: str) -> Response:
         return self._send(method='GET', url=url)
 
+    def _delete(self, url: str) -> Response:
+        return self._send(method='DELETE', url=url)
+
     def _send(self, url: str, method: str, body: any = None, headers: dict = {}) -> Response:
         headers = headers.copy()
         headers["Authorization"] = f'Bearer {self.access_token}'
@@ -30,6 +32,12 @@ class KeycloakClientBase:
 
 
 class KeycloakUserRepository(KeycloakClientBase):
+    role_map = {
+        "admin": "28b683b8-8bdd-4645-9639-368ac2077f48",
+        "guard": "c48603e7-46f2-4adb-9546-699aa2b54933",
+        "user": "166127d5-f6b3-4113-b6db-18eefd6bc95d"
+    }
+
     def __init__(self, access_token: str, base_url: str) -> None:
         super().__init__(access_token=access_token, base_url=base_url)
 
@@ -57,6 +65,27 @@ class KeycloakUserRepository(KeycloakClientBase):
             }
         url = self.build_url("users", user_id)
         self._put(url, body=request)
+
+    def set_user_role(self, user_id: str, user_role: str) -> None:
+        current_roles = self.get_user_roles(user_id)
+        if any([x for x in current_roles if x['name'] == user_role]):
+            return
+        roles_to_delete = [x['id'] for x in current_roles if x['id']
+                           in KeycloakUserRepository.role_map.values()]
+        for role in roles_to_delete:
+            self._remove_role(user_id, role)
+
+        url = self.build_url("users", user_id, "groups",
+                             KeycloakUserRepository.role_map[user_role])
+        self._put(url)
+
+    def get_user_roles(self, user_id: str) -> dict[str, str]:
+        url = self.build_url("users", user_id, "groups")
+        return self._get(url).json()
+
+    def _remove_role(self, user_id: str, user_role: str) -> None:
+        url = self.build_url("users", user_id, "groups", user_role)
+        return self._delete(url)
 
     def _get_users_by_id(self, user_ids: list[str] = []) -> list[dict]:
         def get_user(id):
