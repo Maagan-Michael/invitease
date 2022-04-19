@@ -120,6 +120,10 @@ class ExportLogsGenerator:
     def get_user_name_by_id(cls, user_id: UUID, users: KeycloakUserRepository) -> str:
         result = users.get_users_by_id([str(user_id)])
         user = next(iter(result), None)
+        if user.first_name is None:
+            return user.last_name
+        if user.last_name is None:
+            return user.first_name
         return user.last_name + ', ' + user.first_name
 
     @classmethod
