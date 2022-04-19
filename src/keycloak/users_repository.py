@@ -1,6 +1,26 @@
+from ast import Str
+from os import environ
 from requests import request, Response
 from keycloak.convertions import json_to_user
 from database.models import User
+
+
+class RoleMap(object):
+    def __init__(self) -> None:
+        self._role_map = {
+            "admin": environ.get('IVT_ADMIN_ROLE', "28b683b8-8bdd-4645-9639-368ac2077f48"),
+            "guard": environ.get('IVT_GUARD_ROLE', "c48603e7-46f2-4adb-9546-699aa2b54933"),
+            "user": environ.get('IVT_USER_ROLE', "166127d5-f6b3-4113-b6db-18eefd6bc95d")
+        }
+
+    def __getitem__(self, key):
+        return self._role_map[key]
+
+    def values(self) -> list[str]:
+        return self._role_map.values()
+
+    def id_exists(self, role_id: str) -> bool:
+        return role_id in self._role_map.values()
 
 
 class KeycloakClientBase:
@@ -32,11 +52,7 @@ class KeycloakClientBase:
 
 
 class KeycloakUserRepository(KeycloakClientBase):
-    role_map = {
-        "admin": "28b683b8-8bdd-4645-9639-368ac2077f48",
-        "guard": "c48603e7-46f2-4adb-9546-699aa2b54933",
-        "user": "166127d5-f6b3-4113-b6db-18eefd6bc95d"
-    }
+    role_map = RoleMap()
 
     def __init__(self, access_token: str, base_url: str) -> None:
         super().__init__(access_token=access_token, base_url=base_url)
@@ -70,8 +86,10 @@ class KeycloakUserRepository(KeycloakClientBase):
         current_roles = self.get_user_roles(user_id)
         if any([x for x in current_roles if x['name'] == user_role]):
             return
-        roles_to_delete = [x['id'] for x in current_roles if x['id']
-                           in KeycloakUserRepository.role_map.values()]
+            
+        roles_to_delete = [
+            x['id'] for x in current_roles if KeycloakUserRepository.role_map.id_exists(x['id'])]
+
         for role in roles_to_delete:
             self._remove_role(user_id, role)
 
