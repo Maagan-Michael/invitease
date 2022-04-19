@@ -3,7 +3,6 @@ from typing import List, Optional
 
 from core.utilities import *
 from database import InvitationRepository, User
-from database import UsersRepository
 from fastapi import APIRouter, Depends, Path
 from fastapi import Query
 from pydantic import BaseModel
@@ -17,7 +16,7 @@ def get_invitations(invitations: InvitationRepository = Depends(create_invitatio
 
 
 @router.get("/user_names", summary="Gets user names by their id.")
-def get_user_names(users: UsersRepository = Depends(create_users_repository),
+def get_user_names(users: KeycloakUserRepository = Depends(create_users_repository),
                     user_ids: Optional[List[str]] = Query([])):
     users: list(User) = users.get_user_by_id(user_ids=user_ids)
     def to_map(user: User) -> dict:
