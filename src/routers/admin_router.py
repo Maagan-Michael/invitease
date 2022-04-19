@@ -1,5 +1,4 @@
 import csv
-from curses import use_default_colors
 from datetime import datetime
 from io import StringIO
 from typing import Optional
