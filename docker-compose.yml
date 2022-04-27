@@ -1,7 +1,7 @@
 version: "3.9"
 services:
-  app:
-    hostname: app
+  api:
+    hostname: api
     build: .
     restart: unless-stopped
     volumes:
@@ -14,13 +14,32 @@ services:
     environment:
        IVT_OPENID_DISCOVERY_URL: 'http://keycloak:8080/auth/realms/master/.well-known/openid-configuration'
        IVT_OPENID_DISCOVERY_EXTERNAL_URL: 'http://keycloak.localhost/auth/realms/master/.well-known/openid-configuration'
-      #  IVT_ENABLE_AUTH: 'true'
+       IVT_ENABLE_AUTH: 'true'
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.invitease.rule=Host(`invitease.localhost`)"
-      - "traefik.http.routers.invitease.entrypoints=web"
+      - "traefik.http.routers.api.rule=Host(`api.localhost`)"
+      - "traefik.http.routers.api.entrypoints=web"
       - "traefik.docker.network=web"
-      - "traefik.http.services.invitease.loadbalancer.server.port=8090"
+      - "traefik.http.services.api.loadbalancer.server.port=8090"
+    ports:
+      - "8090:8090"
+      
+  app:
+    hostname: app
+    build: 
+      dockerfile: Dockerfile
+      context: web
+    restart: unless-stopped
+    networks:
+      - web
+    depends_on:
+      - "api"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`app.localhost`)"
+      - "traefik.http.routers.app.entrypoints=web"
+      - "traefik.docker.network=web"
+      - "traefik.http.services.app.loadbalancer.server.port=80"    
 
   dbmanager:
     image: dpage/pgadmin4
@@ -99,6 +118,7 @@ services:
       - "--entrypoints.web.address=:80"
     depends_on:
       - "app"
+      - "dbmanager"
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
