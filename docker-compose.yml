@@ -60,15 +60,17 @@ services:
       - pg_data:/var/lib/postgresql/data
 
   keycloak:
-    image: jboss/keycloak:latest
     hostname: keycloak
     restart: unless-stopped
     networks:
       - web
     depends_on:
       - db
-    volumes:
-      - ./init/keycloak:/opt/jboss/startup-scripts
+    build: 
+      dockerfile: Dockerfile
+      context: keycloak
+    ports:
+      - "8081:8080"
     environment:
       - DB_VENDOR=POSTGRES
       - DB_ADDR=db
