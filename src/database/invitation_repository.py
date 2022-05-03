@@ -13,10 +13,13 @@ class InvitationRepository(RepositoryBase):
         today = datetime.today().strftime("%Y-%m-%d")
         tomorrow: datetime = datetime.today() + timedelta(days=2)
         tomorrow_formatted = tomorrow.strftime("%Y-%m-%d")
-        time_limit = (datetime.utcnow() - timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M")
+        time_limit = (
+            datetime.utcnow() -
+            timedelta(
+                hours=2)).strftime("%Y-%m-%dT%H:%M")
 
         return self.query(lambda x: x.filter(
-            or_(Invitation.is_active == True, Invitation.modify_timestamp >= time_limit),
+            or_(Invitation.is_active, Invitation.modify_timestamp >= time_limit),
             Invitation.invitees_arrival_timestamp >= today,
             Invitation.invitees_arrival_timestamp <= tomorrow_formatted))
 
@@ -25,5 +28,5 @@ class InvitationRepository(RepositoryBase):
 
         return self.query(lambda x: x.filter(
             Invitation.user_id == user_id,
-            Invitation.is_active == True,
+            Invitation.is_active,
             Invitation.invitees_arrival_timestamp >= today))

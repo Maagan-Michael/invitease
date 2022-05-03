@@ -6,7 +6,9 @@ allowed_paths = ('/docs', '/openapi.json')
 
 
 def create_users_repository(request: Request) -> KeycloakUserRepository:
-    return KeycloakUserRepository(request.state.token, "http://keycloak:8080/auth")
+    return KeycloakUserRepository(
+        request.state.token,
+        "http://keycloak:8080/auth")
 
 
 def create_eventlog_repository() -> EventLogRepository:

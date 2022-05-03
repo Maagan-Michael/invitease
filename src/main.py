@@ -59,7 +59,8 @@ if(os.environ.get('IVT_ENABLE_AUTH') == 'true'):
 # @app.get('/db/table/')
 # def form_post(request: Request):
 #     result = 'Choose a table'
-#     return templates.TemplateResponse('view_tables.html', context={'request': request, 'result': result})
+# return templates.TemplateResponse('view_tables.html',
+# context={'request': request, 'result': result})
 
 # @app.post("/db/table/")
 # def form_post(request: Request,table_name: str = Form(...)):
@@ -67,7 +68,9 @@ if(os.environ.get('IVT_ENABLE_AUTH') == 'true'):
 
 #     result = cur.fetchall()
 
-#     return templates.TemplateResponse('view_tables.html', context={'request': request, 'result': result, 'table_name': table_name})
+# return templates.TemplateResponse('view_tables.html',
+# context={'request': request, 'result': result, 'table_name':
+# table_name})
 
 #     # return {"{table} table": cur.fetchall()}
 
@@ -85,7 +88,8 @@ if(os.environ.get('IVT_ENABLE_AUTH') == 'true'):
 # @app.get('/db/add_guard')
 # def form_post(request: Request):
 #     result = 'Add a guard'
-#     return templates.TemplateResponse('add_guard.html', context={'request': request, 'result': result})
+# return templates.TemplateResponse('add_guard.html', context={'request':
+# request, 'result': result})
 
 
 # @app.post('/db/add_guard')
@@ -99,12 +103,14 @@ if(os.environ.get('IVT_ENABLE_AUTH') == 'true'):
 #     # cur.execute(f"INSERT INTO guards (guard_name) VALUES ('{guard_name}');")
 #     # con.commit()
 #     result = f'{guard_name} has been added as a guard'
-#     return templates.TemplateResponse('add_guard.html', context={'request': request, 'result': result, 'guard_name': guard_name})
+# return templates.TemplateResponse('add_guard.html', context={'request':
+# request, 'result': result, 'guard_name': guard_name})
 
 # @app.get('/db/invite_guests')
 # def form_post(request: Request):
 #     result = 'Invite a guest'
-#     return templates.TemplateResponse('invite_guests.html', context={'request': request, 'result': result})
+# return templates.TemplateResponse('invite_guests.html',
+# context={'request': request, 'result': result})
 
 
 # @app.post('/db/invite_guests')
@@ -119,4 +125,5 @@ if(os.environ.get('IVT_ENABLE_AUTH') == 'true'):
 #     # cur.execute(f"INSERT INTO guards (guard_name) VALUES ('{guard_name}');")
 #     # con.commit()
 #     result = f'You have invited {invitees_amount} guests. Welcome!'
-#     return templates.TemplateResponse('add_guard.html', context={'request': request, 'result': result, 'invitees_amount': invitees_amount})
+# return templates.TemplateResponse('add_guard.html', context={'request':
+# request, 'result': result, 'invitees_amount': invitees_amount})
