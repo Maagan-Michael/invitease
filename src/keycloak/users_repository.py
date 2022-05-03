@@ -8,10 +8,15 @@ from database.models import User
 class RoleMap(object):
     def __init__(self) -> None:
         self._role_map = {
-            "admin": environ.get('IVT_ADMIN_ROLE', "28b683b8-8bdd-4645-9639-368ac2077f48"),
-            "guard": environ.get('IVT_GUARD_ROLE', "c48603e7-46f2-4adb-9546-699aa2b54933"),
-            "user": environ.get('IVT_USER_ROLE', "166127d5-f6b3-4113-b6db-18eefd6bc95d")
-        }
+            "admin": environ.get(
+                'IVT_ADMIN_ROLE',
+                "28b683b8-8bdd-4645-9639-368ac2077f48"),
+            "guard": environ.get(
+                'IVT_GUARD_ROLE',
+                "c48603e7-46f2-4adb-9546-699aa2b54933"),
+            "user": environ.get(
+                'IVT_USER_ROLE',
+                "166127d5-f6b3-4113-b6db-18eefd6bc95d")}
 
     def __getitem__(self, key):
         return self._role_map[key]
@@ -31,11 +36,15 @@ class KeycloakClientBase:
     def build_url(self, *args) -> str:
         return '/'.join(s.strip('/') for s in [self.base_url, *args])
 
-    def _post(self, url: str,  body: any = None) -> Response:
-        return self._send(method='POST', url=url, body=body, headers={"Content-Type": "application/json"})
+    def _post(self, url: str, body: any = None) -> Response:
+        return self._send(
+            method='POST', url=url, body=body, headers={
+                "Content-Type": "application/json"})
 
-    def _put(self, url: str,  body: any = None) -> Response:
-        return self._send(method='PUT', url=url, body=body, headers={"Content-Type": "application/json"})
+    def _put(self, url: str, body: any = None) -> Response:
+        return self._send(
+            method='PUT', url=url, body=body, headers={
+                "Content-Type": "application/json"})
 
     def _get(self, url: str) -> Response:
         return self._send(method='GET', url=url)
@@ -43,7 +52,12 @@ class KeycloakClientBase:
     def _delete(self, url: str) -> Response:
         return self._send(method='DELETE', url=url)
 
-    def _send(self, url: str, method: str, body: any = None, headers: dict = {}) -> Response:
+    def _send(
+            self,
+            url: str,
+            method: str,
+            body: any = None,
+            headers: dict = {}) -> Response:
         headers = headers.copy()
         headers["Authorization"] = f'Bearer {self.access_token}'
         response = request(method, url, headers=headers, json=body)
@@ -86,9 +100,10 @@ class KeycloakUserRepository(KeycloakClientBase):
         current_roles = self.get_user_roles(user_id)
         if any([x for x in current_roles if x['name'] == user_role]):
             return
-            
+
         roles_to_delete = [
-            x['id'] for x in current_roles if KeycloakUserRepository.role_map.id_exists(x['id'])]
+            x['id'] for x in current_roles if KeycloakUserRepository.role_map.id_exists(
+                x['id'])]
 
         for role in roles_to_delete:
             self._remove_role(user_id, role)

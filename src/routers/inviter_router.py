@@ -10,8 +10,8 @@ router = APIRouter(prefix="/inviter", tags=["inviter"])
 
 
 @router.get("/invitations", summary="Gets all the invitations for this user.")
-def get_invitations(invitations: InvitationRepository = Depends(create_invitation_repository),
-                    user_id: str = None):
+def get_invitations(invitations: InvitationRepository = Depends(
+        create_invitation_repository), user_id: str = None):
     return invitations.get_user_relevant_invitations(user_id=user_id)
 
 
@@ -43,11 +43,14 @@ class UpdateInvitationRequest(BaseModel):
     comment_for_guard: Optional[str]
 
 
-@router.post("/edit_invitation/{invitation_id}", summary="Updates the invitation information.")
-def update_invitation(request: UpdateInvitationRequest,
-                      invitation: InvitationRepository = Depends(create_invitation_repository),
-                      invitation_id: str = Path(None,
-                                                description="The unique identifier of the invitation.")):
+@router.post("/edit_invitation/{invitation_id}",
+             summary="Updates the invitation information.")
+def update_invitation(
+    request: UpdateInvitationRequest,
+    invitation: InvitationRepository = Depends(create_invitation_repository),
+    invitation_id: str = Path(
+        None,
+        description="The unique identifier of the invitation.")):
     """
     Update the invitation with the specified identifier.
     <br />Available fields:

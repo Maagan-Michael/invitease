@@ -11,5 +11,6 @@ def json_to_user(user_data: dict) -> User:
     result.is_active = user_data.get('enabled')
     attributes = user_data.get('attributes')
     if attributes is not None:
-        result.cellular_number = next(iter(attributes.get('cellularNumber')), None)
+        result.cellular_number = next(
+            iter(attributes.get('cellularNumber')), None)
     return result

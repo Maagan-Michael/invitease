@@ -9,7 +9,8 @@ import collections
 class AuthenticationConfiguration:
     def __init__(self) -> None:
         self.openid_url = os.environ.get(
-            'IVT_OPENID_DISCOVERY_URL', 'http://localhost:8081/auth/realms/master/.well-known/openid-configuration')
+            'IVT_OPENID_DISCOVERY_URL',
+            'http://localhost:8081/auth/realms/master/.well-known/openid-configuration')
 
         self._get_user_info_endpoint()
         self.allowed_paths = ('/docs', '/openapi.json')
@@ -24,7 +25,9 @@ class AuthenticationConfiguration:
 
     @property
     def openid_external_url(self):
-        return os.environ.get('IVT_OPENID_DISCOVERY_EXTERNAL_URL', self.openid_url)
+        return os.environ.get(
+            'IVT_OPENID_DISCOVERY_EXTERNAL_URL',
+            self.openid_url)
 
 
 configuration = None
@@ -75,8 +78,9 @@ async def decode_token(request: Request, call_next):
         return await call_next(request)
     response = None
     if request.state.token is not None:
-        user_response = requests.request(method='GET', url=configuration.userinfo_endpoint,
-                                         headers={"Authorization": f"Bearer {request.state.token}"})
+        user_response = requests.request(
+            method='GET', url=configuration.userinfo_endpoint, headers={
+                "Authorization": f"Bearer {request.state.token}"})
         if user_response.status_code == 200:
             request.state.user = user_response.json()
             response = await call_next(request)
@@ -91,7 +95,8 @@ async def extract_token(request: Request, call_next):
         return await call_next(request)
     response = None
     authorization_header = request.headers.get('Authorization')
-    if authorization_header is not None and authorization_header.startswith("Bearer"):
+    if authorization_header is not None and authorization_header.startswith(
+            "Bearer"):
         request.state.token = authorization_header[len("Bearer "):]
     else:
         request.state.token = None
@@ -114,14 +119,17 @@ class SignatureFixer():
         original_arguments = inspect.signature(handler).parameters.values()
         wrapper_arguments = filter(
             lambda p: p.kind not in (
-                inspect.Parameter.VAR_POSITIONAL, inspect.Parameter.VAR_KEYWORD),
-            inspect.signature(wrapper).parameters.values()
-        )
+                inspect.Parameter.VAR_POSITIONAL,
+                inspect.Parameter.VAR_KEYWORD),
+            inspect.signature(wrapper).parameters.values())
         without_default_values = filter(
             lambda x: x.default == inspect._empty, original_arguments)
         withdefault_values = filter(
             lambda x: x.default != inspect._empty, original_arguments)
-        return [*without_default_values, *wrapper_arguments, *withdefault_values]
+        return [
+            *without_default_values,
+            *wrapper_arguments,
+            *withdefault_values]
 
     def fix_signature(self, wrapper, handler):
         arguments = self._get_arguments(wrapper, handler)
@@ -137,7 +145,7 @@ def require_roles(roles: list):
     def require_roles_decorator(handler):
         from functools import wraps
 
-        async def wrapper(request: Request, *args,  **kwargs):
+        async def wrapper(request: Request, *args, **kwargs):
             if any(x in roles for x in request.state.user['roles']):
                 if inspect.iscoroutinefunction(handler):
                     result = await handler(*args, **kwargs)

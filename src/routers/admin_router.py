@@ -18,7 +18,8 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 @router.get("/users", summary="Gets all the users.")
 @require_roles(roles=["admin"])
-def read_users(users: KeycloakUserRepository = Depends(create_users_repository)):
+def read_users(users: KeycloakUserRepository = Depends(
+        create_users_repository)):
     return users.get_all()
 
 
@@ -32,10 +33,12 @@ class UpdateUserRequest(BaseModel):
 
 @router.post("/users/{user_id}", summary="Updates the user information.")
 @require_roles(roles=["admin"])
-def update_user(update_request: UpdateUserRequest,
-                  user_id: str = Path(
-                      None, description="The unique identifier of the user."),
-                  users: KeycloakUserRepository = Depends(create_users_repository)):
+def update_user(
+        update_request: UpdateUserRequest,
+        user_id: str = Path(
+            None,
+            description="The unique identifier of the user."),
+        users: KeycloakUserRepository = Depends(create_users_repository)):
     """
     Update the user with the specified identifier.
     <br />Available fields:
@@ -51,12 +54,17 @@ def update_user(update_request: UpdateUserRequest,
     users.update_item(user_id, update_data)
 
 
-@router.post("/users/{user_id}/role/{user_role}", summary="Update the user role.")
+@router.post("/users/{user_id}/role/{user_role}",
+             summary="Update the user role.")
 @require_roles(roles=["admin"])
-def set_user_role(user_id: str = Path(None, description="The unique identifier of the user."),
-                  user_role: str = Path(
-                      None, description="The new role to assign to the user."),
-                  users: KeycloakUserRepository = Depends(create_users_repository)):
+def set_user_role(
+        user_id: str = Path(
+            None,
+            description="The unique identifier of the user."),
+    user_role: str = Path(
+            None,
+            description="The new role to assign to the user."),
+        users: KeycloakUserRepository = Depends(create_users_repository)):
     """
     Update the user role of the user with the specified identifier.
     """
@@ -65,7 +73,9 @@ def set_user_role(user_id: str = Path(None, description="The unique identifier o
 
 @ router.get("/eventlogs/export", summary="Exports all events to csv format.")
 @ require_roles(roles=["admin"])
-def export_eventlogs(event_logs: EventsLogRepository = Depends(create_eventlog_repository), users: KeycloakUserRepository = Depends(create_users_repository)):
+def export_eventlogs(
+        event_logs: EventsLogRepository = Depends(create_eventlog_repository),
+        users: KeycloakUserRepository = Depends(create_users_repository)):
     """
     Exports all events to csv format.
     """
@@ -112,7 +122,10 @@ class ExportLogsGenerator:
         return ExportLogsGenerator.prepare_headers(headers)
 
     @classmethod
-    def get_user_name_by_id(cls, user_id: UUID, users: KeycloakUserRepository) -> str:
+    def get_user_name_by_id(
+            cls,
+            user_id: UUID,
+            users: KeycloakUserRepository) -> str:
         result = users.get_users_by_id([str(user_id)])
         user = next(iter(result), None)
         if user.first_name is None:
@@ -122,7 +135,11 @@ class ExportLogsGenerator:
         return user.last_name + ', ' + user.first_name
 
     @classmethod
-    def get_row_content(cls, row: EventLogEntry, header: str, users: KeycloakUserRepository) -> str:
+    def get_row_content(
+            cls,
+            row: EventLogEntry,
+            header: str,
+            users: KeycloakUserRepository) -> str:
         if header == 'user_id' and row.__dict__['user_id'] is not None:
             return ExportLogsGenerator.get_user_name_by_id(row.user_id, users)
         if header == 'guard_id' and row.__dict__['guard_id'] is not None:
@@ -130,7 +147,12 @@ class ExportLogsGenerator:
         return row.__dict__[header]
 
     @classmethod
-    def prepare_logs(cls, headers: dict[str, str], logs: list[EventLogEntry], users: KeycloakUserRepository) -> dict[str, str]:
+    def prepare_logs(cls,
+                     headers: dict[str,
+                                   str],
+                     logs: list[EventLogEntry],
+                     users: KeycloakUserRepository) -> dict[str,
+                                                            str]:
         for row in logs:
             row_data = {
                 headers[x]: ExportLogsGenerator.get_row_content(row, x, users)

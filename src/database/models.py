@@ -25,14 +25,27 @@ class Invitation(Base):
     __tablename__ = 'invitations'
 
     invitation_id = Column(
-        UUID(as_uuid=True), primary_key=True, nullable=False, server_default='uuid_generate_v4()')
+        UUID(
+            as_uuid=True),
+        primary_key=True,
+        nullable=False,
+        server_default='uuid_generate_v4()')
     user_id = Column(UUID(as_uuid=True))
     invitees_amount = Column(Integer, nullable=False)
     invitees_admitted = Column(Integer, nullable=False, server_default="0")
-    invitees_arrival_timestamp = Column(DateTime(timezone=True), nullable=False)
+    invitees_arrival_timestamp = Column(
+        DateTime(timezone=True), nullable=False)
     is_active = Column(Boolean, nullable=False, default=True)
-    creation_timestamp = Column(DateTime(timezone=True), nullable=False, server_default='NOW()')
-    modify_timestamp = Column(DateTime(timezone=True), nullable=False, server_default='NOW()')
+    creation_timestamp = Column(
+        DateTime(
+            timezone=True),
+        nullable=False,
+        server_default='NOW()')
+    modify_timestamp = Column(
+        DateTime(
+            timezone=True),
+        nullable=False,
+        server_default='NOW()')
     comment_for_guard = Column(String)
 
 
