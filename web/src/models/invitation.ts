@@ -1,5 +1,3 @@
-
-
 export class Invitation{
     invitationId: string;
     userId: string;
