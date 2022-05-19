@@ -13,8 +13,7 @@ function App() {
   return (
     <ApplicationContext.Provider value={context}>
       <Routes>
-        <Route path='/' element={<Navigate to="/index" />}>
-        </Route>
+        <Route path='/' element={<Navigate to="/index" />} />
         <Route path="signin-callback" element={<SigninCallback />} />
         <Route path='index' element={<SecureRoute><UserInvitations /></SecureRoute>} />
       </Routes>
