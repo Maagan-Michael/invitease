@@ -1,6 +1,5 @@
 from datetime import datetime
 from typing import Optional
-
 from core.utilities import *
 from database import InvitationRepository, Invitation
 from fastapi import APIRouter, Depends, Path
@@ -10,9 +9,8 @@ router = APIRouter(prefix="/inviter", tags=["inviter"])
 
 
 @router.get("/invitations", summary="Gets all the invitations for this user.")
-def get_invitations(invitations: InvitationRepository = Depends(create_invitation_repository),
-                    user_id: str = None):
-    return invitations.get_user_relevant_invitations(user_id=user_id)
+def get_invitations(request: Request, invitations: InvitationRepository = Depends(create_invitation_repository)):
+    return invitations.get_user_relevant_invitations(user_id=request.state.user.sub)
 
 
 class CreateInvitationRequest(BaseModel):
@@ -45,7 +43,8 @@ class UpdateInvitationRequest(BaseModel):
 
 @router.post("/edit_invitation/{invitation_id}", summary="Updates the invitation information.")
 def update_invitation(request: UpdateInvitationRequest,
-                      invitation: InvitationRepository = Depends(create_invitation_repository),
+                      invitation: InvitationRepository = Depends(
+                          create_invitation_repository),
                       invitation_id: str = Path(None,
                                                 description="The unique identifier of the invitation.")):
     """
