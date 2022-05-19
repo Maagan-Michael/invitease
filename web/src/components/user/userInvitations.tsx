@@ -11,8 +11,8 @@ export function UserInvitations() {
   React.useEffect(() => {
     const inviterService = context.getInviterService();
     inviterService.getInvitations()
-      .then(r => setUserInvitations(r));  
-  }, userInvitations);
+      .then(r => setUserInvitations(r));
+  }, [userInvitations]);
 
   const renderRows = function () {
     return userInvitations.map((invitation) => <InvitaionRow invitation={invitation} />)
