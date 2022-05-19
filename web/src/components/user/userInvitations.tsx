@@ -2,20 +2,16 @@
 import * as React from 'react';
 import { Invitation } from '../../models/invitation';
 import Moment from 'react-moment';
-import { SettingsService } from '../../services/settingsService';
-import { AuthenticationService } from '../../services/authenticationService';
-import { InviterService } from '../../services/inviterService';
+import { useApplicationContext } from '../../utilities/applicationContext';
 
 export function UserInvitations() {
   const [userInvitations, setUserInvitations] = React.useState([] as Invitation[]);
+  const context = useApplicationContext();
 
   React.useEffect(() => {
-    const settingsService = new SettingsService();
-    let authSettings = settingsService.getAuthenticationSettings();
-    let authService = new AuthenticationService(authSettings);
-    let inviterService = new InviterService(settingsService.getServerUrl(), authService.userManager);
+    const inviterService = context.getInviterService();
     inviterService.getInvitations()
-      .then(r => setUserInvitations(r));
+      .then(r => setUserInvitations(r));  
   }, userInvitations);
 
   const renderRows = function () {

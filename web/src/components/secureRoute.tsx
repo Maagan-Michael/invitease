@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { AuthenticationService } from '../services/authenticationService';
-import { SettingsService } from '../services/settingsService';
+import { useApplicationContext } from '../utilities/applicationContext';
 
 export default function SecureRoute(props: any) {
-    let authSettings = new SettingsService().getAuthenticationSettings();
-    let authService = new AuthenticationService(authSettings);
+    const context = useApplicationContext();
+    const authService = context.getAuthenticationService();
     useEffect(() => {
         authService.getUser().then(user => {
             if (!user) {
