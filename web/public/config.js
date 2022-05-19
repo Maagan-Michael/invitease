@@ -1,9 +1,9 @@
 config = {
-    'serverUrl': 'http://invitease.localhost/',
-    'applicationRoot':'http://localhost:3000/',
+    'serverUrl': 'http://api.localhost/',
+    'applicationRoot':'http://app.localhost/',
     'authentication': {
         'clientId': 'invitease',
-        'serviceUrl': 'http://keycloak.localhost/auth/realms/master/',
+        'serviceUrl': 'http://keycloak.localhost/realms/master/',
         'scope': 'openid profile email phone'
     }
 }
