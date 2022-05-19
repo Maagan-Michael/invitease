@@ -2,21 +2,21 @@
 import * as React from 'react';
 import { Invitation } from '../../models/invitation';
 import Moment from 'react-moment';
+import { SettingsService } from '../../services/settingsService';
+import { AuthenticationService } from '../../services/authenticationService';
+import { InviterService } from '../../services/inviterService';
 
 export function UserInvitations() {
-  let userInvitations: Invitation[] = [
-    {
-      invitationId: 'asdf',
-      userId: 'asdf',
-      inviteesAmount: 3,
-      inviteesAdmitted: 2,
-      inviteesArrivalTimestamp: new Date(),
-      isActive: true,
-      creationTimestamp: new Date(),
-      modifyTimestamp: new Date(),
-      commentForGuard: 'hey'
-    }
-  ];
+  const [userInvitations, setUserInvitations] = React.useState([] as Invitation[]);
+
+  React.useEffect(() => {
+    const settingsService = new SettingsService();
+    let authSettings = settingsService.getAuthenticationSettings();
+    let authService = new AuthenticationService(authSettings);
+    let inviterService = new InviterService(settingsService.getServerUrl(), authService.userManager);
+    inviterService.getInvitations()
+      .then(r => setUserInvitations(r));
+  }, userInvitations);
 
   const renderRows = function () {
     return userInvitations.map((invitation) => <InvitaionRow invitation={invitation} />)
