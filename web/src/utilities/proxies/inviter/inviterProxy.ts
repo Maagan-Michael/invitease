@@ -10,11 +10,11 @@ export class InviterProxy extends WebProxy {
         return JsonHelper.toCamelCase(result) as IInvitation[];
     }
 
-    public createInvitation(request: ICreateInvitationRequest): Promise<void> {
-        return this.postAsJson("inviter/invite", JsonHelper.toSnakeCase(request));
+    public async createInvitation(request: ICreateInvitationRequest): Promise<void> {
+        await this.postAsJson("inviter/invite", JsonHelper.toSnakeCase(request));
     }
 
-    public updateInvitation(invitationId: string, request: IUpdateInvitationRequest): Promise<void> {
-        return this.postAsJson("inviter/edit_invitation/" + invitationId, JsonHelper.toSnakeCase(request));
+    public async updateInvitation(invitationId: string, request: IUpdateInvitationRequest): Promise<void> {
+        await this.postAsJson("inviter/edit_invitation/" + invitationId, JsonHelper.toSnakeCase(request));
     }
 }

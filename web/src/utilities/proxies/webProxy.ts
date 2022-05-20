@@ -1,35 +1,40 @@
-import { UserManager } from "oidc-client-ts";
+import { AuthenticationService } from "../../services/authenticationService";
 
 export class WebProxy {
-    private userManager: UserManager
+    private authenticationService: AuthenticationService
     private apiUrl: string
 
-    constructor(apiUrl: string, userManager: UserManager) {
-        this.userManager = userManager;
+    constructor(apiUrl: string, authenticationService: AuthenticationService) {
+        this.authenticationService = authenticationService;
         this.apiUrl = apiUrl;
     }
 
     protected async getJson(url: string, headers: Headers = {} as Headers): Promise<any> {
-        const user = await this.userManager.getUser();
+        const user = await this.authenticationService.getUser();
         const requestInit = {
             method: 'GET',
             headers: this.createAuthorizationHeader(headers, user.access_token),
         };
         let result = await fetch(this.apiUrl + url, requestInit)
-            .then(r => r.json());
+            .then(async r => {
+                await this.redirectIfUnauthorized(r.status);
+                const json = await r.json();
+                return json;
+            });
         return result;
     }
 
-    protected async postAsJson(url: string, body: any, headers: Headers = {} as Headers): Promise<any> {
-        const user = await this.userManager.getUser();
+    protected async postAsJson(url: string, body: any, headers: Headers = {} as Headers): Promise<Response> {
+        const user = await this.authenticationService.getUser();
         const requestInit = {
             method: 'POST',
             headers: this.createAuthorizationHeader(headers, user.access_token),
             body: body,
         };
         requestInit.headers.set("Content-Type", "application/json");
-        let result = await fetch(this.apiUrl + url, requestInit);
-        return result;
+        let response = await fetch(this.apiUrl + url, requestInit);
+        await this.redirectIfUnauthorized(response.status);
+        return response;
     }
 
     private createAuthorizationHeader(headers: Headers, accessToken: string): Headers {
@@ -38,5 +43,12 @@ export class WebProxy {
         result.set("Authorization", "Bearer " + accessToken);
 
         return result;
+    }
+
+    private async redirectIfUnauthorized(status: number): Promise<void> {
+        if (status === 401) {
+            await this.authenticationService.logout();
+            await this.authenticationService.login();
+        }
     }
 }

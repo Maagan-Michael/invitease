@@ -44,7 +44,7 @@ class AppContext {
 
   public getInviterProxy(): InviterProxy {
     if (!this.inviterProxy) {
-      this.inviterProxy = new InviterProxy(this.getSettingsService().getServerUrl(), this.getAuthenticationService().userManager);
+      this.inviterProxy = new InviterProxy(this.getSettingsService().getServerUrl(), this.getAuthenticationService());
     }
     return this.inviterProxy;
   }

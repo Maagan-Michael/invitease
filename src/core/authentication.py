@@ -149,7 +149,7 @@ def require_roles(roles: list):
                 else:
                     result = handler(*args, **kwargs)
                 return result
-            return Response(status_code=401)
+            return Response(status_code=403)
         SignatureFixer().fix_signature(wrapper, handler)
         return wrapper
     return require_roles_decorator
