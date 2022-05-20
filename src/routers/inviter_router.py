@@ -20,16 +20,17 @@ class CreateInvitationRequest(BaseModel):
 
 
 @router.post("/invite", summary="Creates a new invitation for this user.")
-def create_invitation(request: CreateInvitationRequest,
+def create_invitation(createInvitationRequest: CreateInvitationRequest,
+                      request: Request,
                       invitations: InvitationRepository = Depends(
                           create_invitation_repository),
                       user_id: str = None):
     new_invitation = Invitation(
-        user_id=user_id,
-        invitees_amount=request.invitees_amount,
+        user_id=request.state.user.sub,
+        invitees_amount=createInvitationRequest.invitees_amount,
         invitees_arrival_timestamp=datetime.utcfromtimestamp(
-            request.invitees_arrival_timestamp_epoch),
-        comment_for_guard=request.comment_for_guard
+            createInvitationRequest.invitees_arrival_timestamp_epoch),
+        comment_for_guard=createInvitationRequest.comment_for_guard
     )
 
     invitations.add_item(new_invitation)
