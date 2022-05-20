@@ -44,7 +44,7 @@ export class JsonHelper {
         let result = input.charAt(0).toLowerCase();
         let index = 1;
         for (; index < input.length; index++) {
-            if (input[index] == '_') {
+            if (input[index] === '_') {
                 index++;
                 result += input[index].toUpperCase();
             } else {
