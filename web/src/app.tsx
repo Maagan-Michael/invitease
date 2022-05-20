@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Routes, Route, Navigate } from "react-router-dom";
 import SecureRoute from './components/secureRoute';
 import { SigninCallback } from "./components/signinCallback";
-import { InviterInvitations } from './components/inviter/inviterInvitations';
 import { SettingsService } from './services/settingsService';
 import { AuthenticationService } from './services/authenticationService';
 import { InviterProxy } from './utilities/proxies/inviter/inviterProxy';
 import { ApplicationContext } from './utilities/applicationContext';
+import { InviterInvitations } from './features/inviter/inviterIntitations';
 
 function App() {
   const context = new AppContext();

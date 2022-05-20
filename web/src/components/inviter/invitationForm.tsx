@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Formik, Field, Form } from 'formik';
 
-interface IInvitationValues {
+export interface IInvitationValues {
     inviteesAmount: number;
     commentForGuard: string;
 }
 
 interface IFormOptions {
-    initialValues: IInvitationValues,
+    initialValues?: IInvitationValues,
     submitting(values: IInvitationValues): Promise<void> | null
 }
 
