@@ -5,7 +5,7 @@ import { useApplicationContext } from '../../utilities/applicationContext';
 const context = useApplicationContext();
 const inviterProxy = context.getInviterProxy();
 
-export function InviterInvitations() {
+export function CreateInvitation() {
     const createInvitation = async (values: IInvitationValues) => {
         const request = {
             inviteesAmount: values.inviteesAmount,
