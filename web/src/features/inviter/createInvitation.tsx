@@ -10,7 +10,7 @@ export function CreateInvitation() {
         const request = {
             inviteesAmount: values.inviteesAmount,
             commentForGuard: values.commentForGuard,
-            isActive: true
+            inviteesArrivalTimestamp: values.inviteesArrivalTimestamp
         };
         await inviterProxy.createInvitation(request);
         window.location.href = '/';

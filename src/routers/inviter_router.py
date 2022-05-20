@@ -15,8 +15,8 @@ def get_invitations(request: Request, invitations: InvitationRepository = Depend
 
 class CreateInvitationRequest(BaseModel):
     invitees_amount: Optional[int]
-    invitees_arrival_timestamp_epoch: Optional[int]
     comment_for_guard: Optional[str]
+    invitees_arrival_timestamp: Optional[datetime]
 
 
 @router.post("/invite", summary="Creates a new invitation for this user.")
@@ -28,8 +28,7 @@ def create_invitation(createInvitationRequest: CreateInvitationRequest,
     new_invitation = Invitation(
         user_id=request.state.user.sub,
         invitees_amount=createInvitationRequest.invitees_amount,
-        invitees_arrival_timestamp=datetime.utcfromtimestamp(
-            createInvitationRequest.invitees_arrival_timestamp_epoch),
+        invitees_arrival_timestamp=createInvitationRequest.invitees_arrival_timestamp,
         comment_for_guard=createInvitationRequest.comment_for_guard
     )
 
@@ -40,7 +39,7 @@ class UpdateInvitationRequest(BaseModel):
     invitees_amount: Optional[int]
     is_active: Optional[bool]
     comment_for_guard: Optional[str]
-
+    invitees_arrival_timestamp: Optional[datetime]
 
 @router.post("/edit_invitation/{invitation_id}", summary="Updates the invitation information.")
 def update_invitation(request: UpdateInvitationRequest,

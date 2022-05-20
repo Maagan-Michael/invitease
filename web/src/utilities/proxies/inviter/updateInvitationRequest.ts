@@ -1,5 +1,6 @@
-export interface IUpdateInvitationRequest{
+export interface IUpdateInvitationRequest {
     inviteesAmount: number;
-    inviteesArrivalTimestampEpoch: number;
+    inviteesArrivalTimestamp: Date;
     commentForGuard: string;
+    isActive: boolean;
 }

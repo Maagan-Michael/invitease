@@ -4,6 +4,7 @@ import { Formik, Field, Form } from 'formik';
 export interface IInvitationValues {
     inviteesAmount: number;
     commentForGuard: string;
+    inviteesArrivalTimestamp: Date;
 }
 
 interface IFormOptions {
@@ -15,7 +16,8 @@ export function InvitationForm({ initialValues, submitting }: IFormOptions) {
     if (!initialValues) {
         initialValues = {
             inviteesAmount: 1,
-            commentForGuard: ''
+            commentForGuard: '',
+            inviteesArrivalTimestamp: new Date(new Date().getDate() + 1)
         }
     }
 
@@ -26,11 +28,19 @@ export function InvitationForm({ initialValues, submitting }: IFormOptions) {
         return undefined;
     };
 
+    const validateInviteesArrivalTimestamp = (timestamp: Date) => {
+        if (timestamp <= new Date()) {
+            return "Timestamp must be in the future.";
+        }
+        return undefined;
+    };
+
     return (
         <Formik
             initialValues={{
                 inviteesAmount: initialValues.inviteesAmount,
-                commentForGuard: initialValues.commentForGuard
+                commentForGuard: initialValues.commentForGuard,
+                inviteesArrivalTimestamp:initialValues.inviteesArrivalTimestamp
             }}
             onSubmit={submitting}
         >
@@ -38,6 +48,8 @@ export function InvitationForm({ initialValues, submitting }: IFormOptions) {
                 <Form>
                     <label htmlFor="inviteesAmount">Amount:</label>
                     <Field id="inviteesAmount" name="inviteesAmount" type="number" validate={validateAmount} />
+                    <label htmlFor="inviteesArrivalTimestamp">Amount:</label>
+                    <Field id="inviteesArrivalTimestamp" name="inviteesArrivalTimestamp" type="date" validate={validateInviteesArrivalTimestamp} />
                     <label htmlFor="commentForGuard">Comment for guard:</label>
                     <Field id="commentForGuard" name="commentForGuard" />
                     <button type="submit" disabled={isSubmitting}>Create</button>

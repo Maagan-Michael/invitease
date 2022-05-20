@@ -1,5 +1,5 @@
 export interface ICreateInvitationRequest {
     inviteesAmount: number;
-    isActive: boolean;
+    inviteesArrivalTimestamp: Date;
     commentForGuard: string;
 }
