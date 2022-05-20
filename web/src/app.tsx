@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Routes, Route, Navigate } from "react-router-dom";
 import SecureRoute from './components/secureRoute';
 import { SigninCallback } from "./components/signinCallback";
-import { UserInvitations } from './components/user/userInvitations';
+import { InviterInvitations } from './components/inviter/inviterInvitations';
 import { SettingsService } from './services/settingsService';
 import { AuthenticationService } from './services/authenticationService';
 import { InviterProxy } from './utilities/proxies/inviter/inviterProxy';
@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Navigate to="/index" />} />
         <Route path="signin-callback" element={<SigninCallback />} />
-        <Route path='index' element={<SecureRoute><UserInvitations /></SecureRoute>} />
+        <Route path='index' element={<SecureRoute><InviterInvitations /></SecureRoute>} />
       </Routes>
     </ApplicationContext.Provider>
   );

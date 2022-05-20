@@ -1,50 +1,54 @@
-
 import * as React from 'react';
 import { IInvitation } from '../../models/invitation';
 import Moment from 'react-moment';
 import { useApplicationContext } from '../../utilities/applicationContext';
 
-export function UserInvitations() {
-  const [userInvitations, setUserInvitations] = React.useState([] as IInvitation[]);
+export function InviterInvitations() {
+  const [invitations, setInvitations] = React.useState([] as IInvitation[]);
   const context = useApplicationContext();
 
   React.useEffect(() => {
     const inviterProxy = context.getInviterProxy();
     inviterProxy.getInvitations()
-      .then(r => setUserInvitations(r));
-  }, [userInvitations]);
+      .then(r => setInvitations(r));
+  }, [invitations]);
 
   const renderRows = function () {
-    return userInvitations.map((invitation) => <InvitaionRow invitation={invitation} />)
+    return invitations.map((invitation) => <InvitaionRow invitation={invitation} />)
   }
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>
-            addmitted
-          </th>
-          <th>
-            invited
-          </th>
-          <th>
-            arriving at
-          </th>
-          <th>
-            comment for guard
-          </th>
-          <th>
-            created at
-          </th>
-          <th>
-            is active
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {renderRows()}
-      </tbody>
-    </table>
+    <>
+      <div>
+        <button>Invite</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>
+              addmitted
+            </th>
+            <th>
+              invited
+            </th>
+            <th>
+              arriving at
+            </th>
+            <th>
+              comment for guard
+            </th>
+            <th>
+              created at
+            </th>
+            <th>
+              is active
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {renderRows()}
+        </tbody>
+      </table>
+    </>
   );
 }
 
