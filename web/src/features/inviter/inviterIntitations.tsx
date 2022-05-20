@@ -11,7 +11,7 @@ export function InviterInvitations() {
         const inviterProxy = context.getInviterProxy();
         inviterProxy.getInvitations()
             .then(r => setInvitations(r));
-    }, [invitations]);
+    }, []);
 
     return (
         <>
