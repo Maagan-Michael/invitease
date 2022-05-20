@@ -7,7 +7,15 @@ export function SigninCallback() {
     let authService = new AuthenticationService(authSettings);
     React.useEffect(() => {
         authService.handleSignin()
-            .then(user => (window as any).location.href = authSettings.applicationRoot + "index");
+            .then(user => {
+                if (user) {
+                    let returnUrl = "index";
+                    if (user.state && (user.state as any).returnUrl) {
+                        returnUrl = (user.state as any).returnUrl;
+                    }
+                    (window as any).location.href = authSettings.applicationRoot + returnUrl;
+                }
+            });
     });
     return (<></>);
 }

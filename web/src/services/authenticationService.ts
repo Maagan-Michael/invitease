@@ -31,10 +31,10 @@ export class AuthenticationService {
     }
 
     public logout(): Promise<void> {
-        return this.userManager.signoutRedirect();
+        return this.userManager.signoutRedirect({ state: (window.location.pathname + window.location.search).substring(1) });
     }
 
-    public async handleSignin(): Promise<void> {
-        await this.userManager.signinRedirectCallback();
+    public handleSignin(): Promise<User> {
+        return this.userManager.signinRedirectCallback();
     }
 }
