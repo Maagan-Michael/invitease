@@ -5,7 +5,7 @@ import { SigninCallback } from "./components/signinCallback";
 import { UserInvitations } from './components/user/userInvitations';
 import { SettingsService } from './services/settingsService';
 import { AuthenticationService } from './services/authenticationService';
-import { InviterService } from './services/inviterService';
+import { InviterProxy } from './utilities/proxies/inviter/inviterProxy';
 import { ApplicationContext } from './utilities/applicationContext';
 
 function App() {
@@ -26,7 +26,7 @@ export default App;
 class AppContext {
   private settingsService: SettingsService;
   private authenticationService: AuthenticationService;
-  private inviterService: InviterService;
+  private inviterProxy: InviterProxy;
 
   public getAuthenticationService(): AuthenticationService {
     if (!this.authenticationService) {
@@ -42,10 +42,10 @@ class AppContext {
     return this.settingsService;
   }
 
-  public getInviterService(): InviterService {
-    if (!this.inviterService) {
-      this.inviterService = new InviterService(this.getSettingsService().getServerUrl(), this.getAuthenticationService().userManager);
+  public getInviterProxy(): InviterProxy {
+    if (!this.inviterProxy) {
+      this.inviterProxy = new InviterProxy(this.getSettingsService().getServerUrl(), this.getAuthenticationService().userManager);
     }
-    return this.inviterService;
+    return this.inviterProxy;
   }
 }

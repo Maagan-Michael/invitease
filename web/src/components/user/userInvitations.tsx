@@ -9,8 +9,8 @@ export function UserInvitations() {
   const context = useApplicationContext();
 
   React.useEffect(() => {
-    const inviterService = context.getInviterService();
-    inviterService.getInvitations()
+    const inviterProxy = context.getInviterProxy();
+    inviterProxy.getInvitations()
       .then(r => setUserInvitations(r));
   }, [userInvitations]);
 

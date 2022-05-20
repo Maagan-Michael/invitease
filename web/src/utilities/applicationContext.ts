@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { AuthenticationService } from '../services/authenticationService';
-import { InviterService } from '../services/inviterService';
+import { InviterProxy } from '../utilities/proxies/inviter/inviterProxy';
 import { SettingsService } from '../services/settingsService';
 
 export interface IApplicationContext {
     getAuthenticationService(): AuthenticationService;
     getSettingsService(): SettingsService;
-    getInviterService(): InviterService;
+    getInviterProxy(): InviterProxy;
 }
 
 export const ApplicationContext = React.createContext({} as IApplicationContext);
