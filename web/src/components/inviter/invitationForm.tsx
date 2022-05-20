@@ -1,25 +1,24 @@
 import * as React from 'react';
-import { useApplicationContext } from '../../utilities/applicationContext';
 import { Formik, Field, Form } from 'formik';
 
-interface IValues {
+interface IInvitationValues {
     inviteesAmount: number;
     commentForGuard: string;
 }
 
-export function CreateInvitation() {
-    const context = useApplicationContext();
-    const inviterProxy = context.getInviterProxy();
+interface IFormOptions {
+    initialValues: IInvitationValues,
+    submitting(values: IInvitationValues): Promise<void> | null
+}
 
-    const createInvitation = async (values: IValues) => {
-        const request = {
-            inviteesAmount: values.inviteesAmount,
-            commentForGuard: values.commentForGuard,
-            isActive: true
-        };
-        await inviterProxy.createInvitation(request);
-        window.location.href = '/';
-    };
+export function InvitationForm({ initialValues, submitting }: IFormOptions) {
+    if (!initialValues) {
+        initialValues = {
+            inviteesAmount: 1,
+            commentForGuard: ''
+        }
+    }
+
     const validateAmount = (amount: number) => {
         if (amount <= 0 || Math.round(amount) !== amount) {
             return "Amount must be a positive integer.";
@@ -30,10 +29,10 @@ export function CreateInvitation() {
     return (
         <Formik
             initialValues={{
-                inviteesAmount: 1,
-                commentForGuard: ''
+                inviteesAmount: initialValues.inviteesAmount,
+                commentForGuard: initialValues.commentForGuard
             }}
-            onSubmit={createInvitation}
+            onSubmit={submitting}
         >
             {({ isSubmitting }) => (
                 <Form>
