@@ -20,6 +20,18 @@ export class WebProxy {
         return result;
     }
 
+    protected async postAsJson(url: string, body: any, headers: Headers = {} as Headers): Promise<any> {
+        const user = await this.userManager.getUser();
+        const requestInit = {
+            method: 'POST',
+            headers: this.createAuthorizationHeader(headers, user.access_token),
+            body: body,
+        };
+        requestInit.headers.set("Content-Type", "application/json");
+        let result = await fetch(this.apiUrl + url, requestInit);
+        return result;
+    }
+
     private createAuthorizationHeader(headers: Headers, accessToken: string): Headers {
         let result = new Headers(headers);
 
