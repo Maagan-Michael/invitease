@@ -1,4 +1,4 @@
-export class Invitation{
+export interface IInvitation{
     invitationId: string;
     userId: string;
     inviteesAmount: number;
@@ -8,5 +8,4 @@ export class Invitation{
     creationTimestamp: Date;
     modifyTimestamp: Date;
     commentForGuard: string;
-
 }

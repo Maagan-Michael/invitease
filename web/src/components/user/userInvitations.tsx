@@ -1,11 +1,11 @@
 
 import * as React from 'react';
-import { Invitation } from '../../models/invitation';
+import { IInvitation } from '../../models/invitation';
 import Moment from 'react-moment';
 import { useApplicationContext } from '../../utilities/applicationContext';
 
 export function UserInvitations() {
-  const [userInvitations, setUserInvitations] = React.useState([] as Invitation[]);
+  const [userInvitations, setUserInvitations] = React.useState([] as IInvitation[]);
   const context = useApplicationContext();
 
   React.useEffect(() => {
@@ -74,5 +74,5 @@ function InvitaionRow({ invitation }: IInvitaionRowData) {
 }
 
 interface IInvitaionRowData {
-  invitation: Invitation
+  invitation: IInvitation
 }
