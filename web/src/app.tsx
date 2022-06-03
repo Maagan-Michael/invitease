@@ -24,9 +24,9 @@ function App() {
 export default App;
 
 class AppContext {
-  private settingsService: SettingsService;
-  private authenticationService: AuthenticationService;
-  private inviterProxy: InviterProxy;
+  private settingsService: SettingsService | undefined;
+  private authenticationService: AuthenticationService | undefined;
+  private inviterProxy: InviterProxy | undefined;
 
   public getAuthenticationService(): AuthenticationService {
     if (!this.authenticationService) {

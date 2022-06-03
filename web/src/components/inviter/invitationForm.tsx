@@ -9,7 +9,7 @@ export interface IInvitationValues {
 
 interface IFormOptions {
     initialValues?: IInvitationValues,
-    submitting(values: IInvitationValues): Promise<void> | null
+    submitting(values: IInvitationValues): Promise<void> 
 }
 
 export function InvitationForm({ initialValues, submitting }: IFormOptions) {
