@@ -9,7 +9,7 @@ export function InviterScreen(){
             <InviterNavBar />
             <header className="background" >
                 <h1>HELLO</h1>
-                {/* <CreateInvitation /> */}
+                <CreateInvitation />
                 <InviterInvitations />
 
             </header>
