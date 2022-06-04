@@ -7,6 +7,7 @@ import { AuthenticationService } from './services/authenticationService';
 import { InviterProxy } from './utilities/proxies/inviter/inviterProxy';
 import { ApplicationContext } from './utilities/applicationContext';
 import { InviterInvitations } from './features/inviter/inviterIntitations';
+import { InviterScreen } from './features/inviter/inviterScreen';
 
 function App() {
   const context = new AppContext();
@@ -15,7 +16,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Navigate to="/index" />} />
         <Route path="signin-callback" element={<SigninCallback />} />
-        <Route path='index' element={<SecureRoute><InviterInvitations /></SecureRoute>} />
+        <Route path='index' element={<SecureRoute><InviterScreen /></SecureRoute>} />
       </Routes>
     </ApplicationContext.Provider>
   );
