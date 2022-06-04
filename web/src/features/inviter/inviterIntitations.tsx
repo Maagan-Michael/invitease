@@ -14,9 +14,6 @@ export function InviterInvitations() {
     }, []);
 
     return (
-        <>
-            <button>Create</button>
             <InvitationsTable invitations={invitations} />
-        </>
     );
 }

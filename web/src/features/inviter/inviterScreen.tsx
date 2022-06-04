@@ -8,9 +8,9 @@ export function InviterScreen(){
         <div>
             <InviterNavBar />
             <header className="background" >
-                <h1>HELLO</h1>
+                <h2>?אהלן! את מי תרצו להזמין</h2>
                 <CreateInvitation />
-                <InviterInvitations />
+                {/* <InviterInvitations /> */}
 
             </header>
         </div>

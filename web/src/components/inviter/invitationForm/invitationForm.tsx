@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Formik, Field, Form } from 'formik';
+import './invitationForm.css'
 
 export interface IInvitationValues {
     inviteesAmount: number;
@@ -45,15 +46,19 @@ export function InvitationForm({ initialValues, submitting }: IFormOptions) {
             onSubmit={submitting}
         >
             {({ isSubmitting }) => (
-                <Form>
-                    <label htmlFor="inviteesAmount">Amount:</label>
+                <div className='center'>
+                <Form className='form-box'>
+                    <label htmlFor="inviteesAmount">:כמות רכבים</label>
                     <Field id="inviteesAmount" name="inviteesAmount" type="number" validate={validateAmount} />
-                    <label htmlFor="inviteesArrivalTimestamp">Amount:</label>
+                    <label htmlFor="inviteesArrivalTimestamp">:זמן הגעה משוער</label>
                     <Field id="inviteesArrivalTimestamp" name="inviteesArrivalTimestamp" type="date" validate={validateInviteesArrivalTimestamp} />
-                    <label htmlFor="commentForGuard">Comment for guard:</label>
+                    <label htmlFor="commentForGuard">:הערה לשומר</label>
                     <Field id="commentForGuard" name="commentForGuard" />
-                    <button type="submit" disabled={isSubmitting}>Create</button>
+                    <h4></h4>
+            <button type="submit" className='submitButton' disabled={isSubmitting}>Create</button>
                 </Form>
+
+                </div>
             )}
         </Formik>
     );

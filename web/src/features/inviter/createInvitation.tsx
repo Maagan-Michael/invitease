@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IInvitationValues, InvitationForm } from '../../components/inviter/invitationForm';
+import { IInvitationValues, InvitationForm } from '../../components/inviter/invitationForm/invitationForm';
 import { useApplicationContext } from '../../utilities/applicationContext';
 
 
