@@ -34,11 +34,11 @@
 
 .submitButton{
     display: inline-block;
-    width: 25%;
+    width: 30%;
     height: 2rem;
     color: purple;
     border: 0;
-    bottom: -4vh;
+    bottom: -6vh;
     left: 15vw;
     cursor: pointer;
     font-size: 20px;

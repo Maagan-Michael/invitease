@@ -13,6 +13,7 @@ export function CreateInvitation() {
             inviteesArrivalTimestamp: values.inviteesArrivalTimestamp
         };
         await inviterProxy.createInvitation(request);
+        
         window.location.href = '/';
     };
 

@@ -36,6 +36,7 @@ export function InvitationForm({ initialValues, submitting }: IFormOptions) {
         return undefined;
     };
 
+
     return (
         <Formik
             initialValues={{
@@ -54,8 +55,7 @@ export function InvitationForm({ initialValues, submitting }: IFormOptions) {
                     <Field id="inviteesArrivalTimestamp" name="inviteesArrivalTimestamp" type="date" validate={validateInviteesArrivalTimestamp} />
                     <label htmlFor="commentForGuard">:הערה לשומר</label>
                     <Field id="commentForGuard" name="commentForGuard" />
-                    <h4></h4>
-            <button type="submit" className='submitButton' disabled={isSubmitting}>Create</button>
+                    <button type="submit" className='submitButton' disabled={isSubmitting}>שליחה</button>
                 </Form>
 
                 </div>
