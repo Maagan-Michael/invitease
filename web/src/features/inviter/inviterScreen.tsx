@@ -5,10 +5,9 @@ import { InviterInvitations } from "./inviterIntitations";
 
 export function InviterScreen(){
     return (
-        <div>
+        <div className="basic_div">
             <InviterNavBar />
             <header className="background" >
-                <h2>?אהלן! את מי תרצו להזמין</h2>
                 {/* <h2>הזמנות שלי</h2> */}
                 <CreateInvitation />
                 {/* <InviterInvitations /> */}

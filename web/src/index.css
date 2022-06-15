@@ -1,3 +1,14 @@
+.basic_div{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+}
+
+
 .header{
     padding-right: 10px;
     padding-left: 10px;
@@ -37,7 +48,7 @@
 
 .background{
     background-color: #3b2d62;
-    min-height: 85vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,5 +60,17 @@
 .center{
     flex-direction: column;
   align-items: center;
+  justify-content: center;
 
+
+
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+ 
 }
