@@ -3,56 +3,37 @@ import { NumberOfCarsBox } from "./numberOfCarsBox";
 import { IconButton } from "@mui/material";
 import "./numberOfCars.css"
 
+export function NumberOfCars({ increment, decrement, currentValue }: ISetNumberOfCars) {
 
-
-export function NumberOfCars(props: any) {
-
-  function add() {
-
-    props.setNumberOfCars((oldNumber: number) => {
-      if (oldNumber === 20) {
-        return oldNumber;
-      } else {
-        return oldNumber + 1;
-      }
-    })
-  }
-
-  function subtract() {
-
-    props.setNumberOfCars((oldNumber: number) => {
-      if (oldNumber === 0) {
-        return oldNumber;
-      } else {
-        return oldNumber - 1;
-      }
-    })
-  }
   return (
     <div className="row">
       <IconButton sx={{
         fontSize: "4vw",
         width: "5vw",
         height: "5vw",
-        
         color: "white"
-      }} onClick={subtract}>
+      }} onClick={decrement}>
         -
       </IconButton>
 
-
-      <NumberOfCarsBox numberOfCars={props.numberOfCars} />
+      <NumberOfCarsBox currentValue={currentValue} />
 
       <IconButton sx={{
-         fontSize: "4vw",
-         width: "5vw",
-         height: "5vw",
-         
+        fontSize: "4vw",
+        width: "5vw",
+        height: "5vw",
+
         color: "white"
-      }} onClick={add}>
+      }} onClick={increment}>
         +
       </IconButton>
 
     </div>
   )
+}
+
+interface ISetNumberOfCars {
+  increment(): void;
+  decrement(): void;
+  currentValue: number;
 }

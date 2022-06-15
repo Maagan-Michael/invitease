@@ -77,7 +77,6 @@ interface IInvitaionRowData {
   invitation: IInvitation
 }
 
-
 export function BasicTable({ invitations }: IInvitations) {
   return (
     <TableContainer component={Paper}>
