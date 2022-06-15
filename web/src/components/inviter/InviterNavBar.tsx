@@ -5,7 +5,6 @@ import logo from "../../images/mm-logo.png"
 export function InviterNavBar() {
     return (
         <header className="header">
-
             <nav className="nav">
                 <div className="nav">
                     <img src={logo} className="App-logo-small" alt="logo" />
