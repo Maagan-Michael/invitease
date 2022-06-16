@@ -9,19 +9,19 @@ export class WebProxy {
         this.apiUrl = apiUrl;
     }
 
-    protected async getJson<T>(url: string, headers: Headers = {} as Headers): Promise<T> {
+    protected async getJson<T>(url: string, headers: Headers = {} as Headers): Promise<T | void> {
         const user = await this.authenticationService.getUser();
         const requestInit = {
             method: 'GET',
             headers: this.createAuthorizationHeader(headers, user.access_token),
         };
-        let result = await fetch(this.apiUrl + url, requestInit)
-            .then(async r => {
-                await this.redirectIfUnauthorized(r.status);
-                const json = await r.json();
-                return json as T;
+        const result = await this.fetch(this.apiUrl + url, requestInit)
+            .then(r => {
+                if (r) {
+                    return r.json();
+                }
             });
-        return result;
+        return result as T;
     }
 
     protected async postAsJson<T>(url: string, body: T, headers: Headers = {} as Headers): Promise<Response> {
@@ -32,9 +32,11 @@ export class WebProxy {
             body: JSON.stringify(body),
         };
         requestInit.headers.set("Content-Type", "application/json");
-        let response = await fetch(this.apiUrl + url, requestInit);
-        await this.redirectIfUnauthorized(response.status);
-        return response;
+        const response = await this.fetch(this.apiUrl + url, requestInit);
+        if (response) {
+            return response;
+        }
+        return undefined;
     }
 
     private createAuthorizationHeader(headers: Headers, accessToken: string): Headers {
@@ -48,7 +50,14 @@ export class WebProxy {
     private async redirectIfUnauthorized(status: number): Promise<void> {
         if (status === 401) {
             await this.authenticationService.logout();
-            await this.authenticationService.login();
         }
+    }
+
+    private fetch(url: string, requestInit: RequestInit): Promise<Response | void> {
+        const response = fetch(url, requestInit)
+            .then(r => this.redirectIfUnauthorized(r.status))
+            .catch(e => this.authenticationService.logout());
+
+        return response;
     }
 }
