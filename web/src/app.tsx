@@ -16,7 +16,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Navigate to="/index" />} />
         <Route path="signin-callback" element={<SigninCallback />} />
-        <Route path='index' element={<SecureRoute><InviterScreen /></SecureRoute>} />
+        <Route path='index' element={<SecureRoute><InviterInvitations /></SecureRoute>} />
+        <Route path='invite' element={<SecureRoute><InviterScreen /></SecureRoute>} />
       </Routes>
     </ApplicationContext.Provider>
   );
