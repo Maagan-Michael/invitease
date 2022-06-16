@@ -86,7 +86,6 @@ export class JsonHelper {
             if (input[index] === input[index].toUpperCase()) {
                 result += "_";
                 result += input[index].toLowerCase();
-                index++;
             } else {
                 result += input[index];
             }
