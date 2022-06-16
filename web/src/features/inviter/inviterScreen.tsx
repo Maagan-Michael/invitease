@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { InviterNavBar } from "../../components/inviter/InviterNavBar";
 import { CreateInvitation } from "./createInvitation";
 import { InviterInvitations } from "./inviterIntitations";

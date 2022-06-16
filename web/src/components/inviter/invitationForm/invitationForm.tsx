@@ -4,7 +4,7 @@ import { NumberOfCars } from './numberOfCars/numberOfCars';
 import { DayOfTheWeek } from './dayOfTheWeek/dayOfTheWeek';
 import { CommentForGuard } from './commentForGuard/commentForGuard';
 import { useApplicationContext } from '../../../utilities/applicationContext';
-import moment from 'moment';
+import * as  moment from 'moment';
 import { SubmitButton } from './submitButton/submitButton';
 
 export interface IInvitationValues {

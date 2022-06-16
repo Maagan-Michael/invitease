@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import "../../index.css"
 import logo from "../../images/mm-logo.png"
 

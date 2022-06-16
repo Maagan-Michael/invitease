@@ -9,11 +9,11 @@ export class WebProxy {
         this.apiUrl = apiUrl;
     }
 
-    protected async getJson<T>(url: string, headers: Headers = {} as Headers): Promise<T | void> {
+    protected async getJson<T>(url: string, headers: Headers = {} as Headers): Promise<T> {
         const user = await this.authenticationService.getUser();
         const requestInit = {
             method: 'GET',
-            headers: this.createAuthorizationHeader(headers, user.access_token),
+            headers: this.createAuthorizationHeader(headers, user!.access_token),
         };
         const result = await this.fetch(this.apiUrl + url, requestInit)
             .then(r => {
@@ -28,7 +28,7 @@ export class WebProxy {
         const user = await this.authenticationService.getUser();
         const requestInit = {
             method: 'POST',
-            headers: this.createAuthorizationHeader(headers, user.access_token),
+            headers: this.createAuthorizationHeader(headers, user!.access_token),
             body: JSON.stringify(body),
         };
         requestInit.headers.set("Content-Type", "application/json");
@@ -36,7 +36,7 @@ export class WebProxy {
         if (response) {
             return response;
         }
-        return undefined;
+        return {} as Response;
     }
 
     private createAuthorizationHeader(headers: Headers, accessToken: string): Headers {
