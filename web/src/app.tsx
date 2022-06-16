@@ -8,6 +8,8 @@ import { InviterProxy } from './utilities/proxies/inviter/inviterProxy';
 import { ApplicationContext } from './utilities/applicationContext';
 import { InviterInvitations } from './features/inviter/inviterIntitations';
 import { InviterScreen } from './features/inviter/inviterScreen';
+import {GuardScreen} from './features/guard/guardScreen';
+
 
 function App() {
   const context = new AppContext();
@@ -16,8 +18,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Navigate to="/index" />} />
         <Route path="signin-callback" element={<SigninCallback />} />
-        <Route path='index' element={<SecureRoute><InviterInvitations /></SecureRoute>} />
-        <Route path='invite' element={<SecureRoute><InviterScreen /></SecureRoute>} />
+        <Route path='index' element={<SecureRoute><GuardScreen /></SecureRoute>} />
       </Routes>
     </ApplicationContext.Provider>
   );
