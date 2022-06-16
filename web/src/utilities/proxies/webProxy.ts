@@ -53,9 +53,12 @@ export class WebProxy {
         }
     }
 
-    private fetch(url: string, requestInit: RequestInit): Promise<Response | void> {
-        const response = fetch(url, requestInit)
-            .then(r => this.redirectIfUnauthorized(r.status))
+    private async fetch(url: string, requestInit: RequestInit): Promise<Response | void> {
+        const response = await fetch(url, requestInit)
+            .then(async r => {
+                await this.redirectIfUnauthorized(r.status);
+                return r;
+            })
             .catch(e => this.authenticationService.logout());
 
         return response;
