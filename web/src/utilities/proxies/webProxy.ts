@@ -9,7 +9,7 @@ export class WebProxy {
         this.apiUrl = apiUrl;
     }
 
-    protected async getJson(url: string, headers: Headers = {} as Headers): Promise<any> {
+    protected async getJson<T>(url: string, headers: Headers = {} as Headers): Promise<T> {
         const user = await this.authenticationService.getUser();
         const requestInit = {
             method: 'GET',
@@ -19,7 +19,7 @@ export class WebProxy {
             .then(async r => {
                 await this.redirectIfUnauthorized(r.status);
                 const json = await r.json();
-                return json;
+                return json as T;
             });
         return result;
     }
