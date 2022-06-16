@@ -12,7 +12,6 @@ export class InviterProxy extends WebProxy {
 
     public async createInvitation(request: ICreateInvitationRequest): Promise<void> {
         await this.postAsJson("inviter/invite", JsonHelper.toSnakeCase(request));
-        alert(`הזמנה נוצרה ל-${request.inviteesAmount} רכבים`)
     }
 
     public async updateInvitation(invitationId: string, request: IUpdateInvitationRequest): Promise<void> {
