@@ -91,22 +91,26 @@ export function BasicTable({ invitations }: IInvitations) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {invitations.map((invitation) => (
-            <TableRow
-              key={invitation.invitationId}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-              <Moment format="MM/DD" date={invitation.inviteesArrivalTimestamp} />
-              </TableCell>
-              <TableCell align="right">{invitation.inviteesAdmitted}</TableCell>
-              <TableCell align="right">{invitation.inviteesAmount}</TableCell>
-              <TableCell align="right">{invitation.isActive? "✓":"X"}</TableCell>
-              <TableCell align="right">{invitation.commentForGuard}</TableCell>
-            </TableRow>
-          ))}
+          {invitations.map(renderInvitation)}
         </TableBody>
       </Table>
     </TableContainer>
+  );
+}
+
+function renderInvitation(invitation: IInvitation) {
+  return (
+    <TableRow
+      key={invitation.invitationId}
+      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+    >
+      <TableCell component="th" scope="row">
+        <Moment format="MM/DD" date={invitation.inviteesArrivalTimestamp} />
+      </TableCell>
+      <TableCell align="right">{invitation.inviteesAdmitted}</TableCell>
+      <TableCell align="right">{invitation.inviteesAmount}</TableCell>
+      <TableCell align="right">{invitation.isActive ? "✓" : "X"}</TableCell>
+      <TableCell align="right">{invitation.commentForGuard}</TableCell>
+    </TableRow>
   );
 }
