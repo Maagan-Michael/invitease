@@ -10,7 +10,7 @@ export function InviterScreen(){
             <header className="background" >
                 {/* <h2>הזמנות שלי</h2> */}
                 <CreateInvitation />
-                {/* <InviterInvitations /> */}
+                <InviterInvitations />
 
             </header>
         </div>

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { InvitationsTable } from '../../components/inviter/invitationsTable';
 import { BasicTable } from '../../components/inviter/invitationsTable';
 import { IInvitation } from '../../models/invitation';
 import { useApplicationContext } from '../../utilities/applicationContext';

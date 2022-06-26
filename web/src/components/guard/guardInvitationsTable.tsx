@@ -13,24 +13,23 @@ interface IInvitations {
   invitations: IInvitation[];
 }
 
-
-
-
 interface IInvitaionRowData {
   invitation: IInvitation
 }
 
-export function BasicTable({ invitations }: IInvitations) {
+export function GuardInvitationsTable({ invitations }: IInvitations) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>תאריך הגעה</TableCell>
-            <TableCell align="right">נכנסו</TableCell>
-            <TableCell align="right">מוזמנים</TableCell>
-            <TableCell align="right">פעיל</TableCell>
-            <TableCell align="right">הודעה לשומר</TableCell>
+            <TableCell>שם</TableCell>
+            <TableCell >נכנסו</TableCell>
+            <TableCell >מוזמנים</TableCell>
+            <TableCell >הכנסה</TableCell>
+            <TableCell >הודעה</TableCell>
+            <TableCell align="right">מחיקת הכנסה</TableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>
@@ -41,19 +40,29 @@ export function BasicTable({ invitations }: IInvitations) {
   );
 }
 
+function admittInvitee(){
+
+  console.log("come in yo")
+}
+
+function unAdmittInvitee(){
+
+  console.log("yo get outta here")
+}
+
 function renderInvitation(invitation: IInvitation) {
   return (
     <TableRow
       key={invitation.invitationId}
       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
-      <TableCell component="th" scope="row">
-        <Moment format="MM/DD" date={invitation.inviteesArrivalTimestamp} />
-      </TableCell>
-      <TableCell align="right">{invitation.inviteesAdmitted}</TableCell>
-      <TableCell align="right">{invitation.inviteesAmount}</TableCell>
-      <TableCell align="right">{invitation.isActive ? "✓" : "X"}</TableCell>
-      <TableCell align="right">{invitation.commentForGuard}</TableCell>
+     
+      <TableCell>name</TableCell>
+      <TableCell>{invitation.inviteesAdmitted}</TableCell>
+      <TableCell>{invitation.inviteesAmount}</TableCell>
+      <TableCell onClick={admittInvitee}>+</TableCell>
+      <TableCell>{invitation.commentForGuard}</TableCell>
+      <TableCell align="right" onClick={unAdmittInvitee}>-</TableCell>
     </TableRow>
   );
 }
