@@ -40,14 +40,24 @@ export function GuardInvitationsTable({ invitations }: IInvitations) {
   );
 }
 
-function admittInvitee(){
+function admittInvitee(invitation: IInvitation){
+  const invitationId = invitation.invitationId
+  const newAddmittedValue = invitation.inviteesAdmitted + 1
 
-  console.log("come in yo")
+  if (newAddmittedValue < invitation.inviteesAmount) {
+    console.log("come in yo")
+
+  }
 }
 
-function unAdmittInvitee(){
-
-  console.log("yo get outta here")
+function unAdmittInvitee(invitation: IInvitation){
+  const invitationId = invitation.invitationId
+  const newAddmittedValue = invitation.inviteesAdmitted - 1
+  if (newAddmittedValue > 1) {
+    
+    console.log("yo get outta here")
+  }
+  
 }
 
 function renderInvitation(invitation: IInvitation) {
@@ -60,9 +70,9 @@ function renderInvitation(invitation: IInvitation) {
       <TableCell>name</TableCell>
       <TableCell>{invitation.inviteesAdmitted}</TableCell>
       <TableCell>{invitation.inviteesAmount}</TableCell>
-      <TableCell onClick={admittInvitee}>+</TableCell>
+      <TableCell onClick={() =>admittInvitee(invitation)}>+</TableCell>
       <TableCell>{invitation.commentForGuard}</TableCell>
-      <TableCell align="right" onClick={unAdmittInvitee}>-</TableCell>
+      <TableCell align="right" onClick={() => unAdmittInvitee(invitation)}>-</TableCell>
     </TableRow>
   );
 }
