@@ -8,7 +8,8 @@ import { InviterProxy } from './utilities/proxies/inviter/inviterProxy';
 import { ApplicationContext } from './utilities/applicationContext';
 import { InviterInvitations } from './features/inviter/inviterIntitations';
 import { InviterScreen } from './features/inviter/inviterScreen';
-import {GuardScreen} from './features/guard/guardScreen';
+import { GuardScreen } from './features/guard/guardScreen';
+import { GuardProxy } from './utilities/proxies/guard/guardProxy';
 
 
 function App() {
@@ -30,6 +31,7 @@ class AppContext {
   private settingsService: SettingsService | undefined;
   private authenticationService: AuthenticationService | undefined;
   private inviterProxy: InviterProxy | undefined;
+  private guardProxy: GuardProxy | undefined;
 
   public getAuthenticationService(): AuthenticationService {
     if (!this.authenticationService) {
@@ -50,5 +52,12 @@ class AppContext {
       this.inviterProxy = new InviterProxy(this.getSettingsService().getServerUrl(), this.getAuthenticationService());
     }
     return this.inviterProxy;
+  }
+
+  public getGuardProxy(): GuardProxy {
+    if (!this.guardProxy) {
+      this.guardProxy = new GuardProxy(this.getSettingsService().getServerUrl(), this.getAuthenticationService());
+    }
+    return this.guardProxy;
   }
 }
