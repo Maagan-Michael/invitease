@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { IInvitation } from '../../models/invitation';
-import Moment from 'react-moment';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -11,68 +10,62 @@ import Paper from '@mui/material/Paper';
 
 interface IInvitations {
   invitations: IInvitation[];
+  changeAdmitted(invitation: IInvitation, change: number): Promise<number>;
 }
 
 interface IInvitaionRowData {
-  invitation: IInvitation
+  invitation: IInvitation;
+  changeAdmitted(invitation: IInvitation, change: number): Promise<number>;
 }
 
-export function GuardInvitationsTable({ invitations }: IInvitations) {
+export function GuardInvitationsTable({ invitations, changeAdmitted }: IInvitations) {
+  var rows = invitations.map(x => { return { invitation: x, changeAdmitted: changeAdmitted }; });
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>שם</TableCell>
-            <TableCell >נכנסו</TableCell>
-            <TableCell >מוזמנים</TableCell>
-            <TableCell >הכנסה</TableCell>
-            <TableCell >הודעה</TableCell>
+            <TableCell>נכנסו</TableCell>
+            <TableCell>מוזמנים</TableCell>
+            <TableCell>הכנסה</TableCell>
+            <TableCell>הודעה</TableCell>
             <TableCell align="right">מחיקת הכנסה</TableCell>
-
           </TableRow>
         </TableHead>
         <TableBody>
-          {invitations.map(renderInvitation)}
+          {rows.map(renderInvitation)}
         </TableBody>
       </Table>
     </TableContainer>
   );
 }
 
-function admittInvitee(invitation: IInvitation){
-  const invitationId = invitation.invitationId
-  const newAddmittedValue = invitation.inviteesAdmitted + 1
-
-  if (newAddmittedValue < invitation.inviteesAmount) {
-    console.log("come in yo")
-
-  }
+function renderInvitation({ invitation, changeAdmitted }: IInvitaionRowData) {
+  return (<GuardInvitationsTableRow invitation={invitation} changeAdmitted={changeAdmitted} />);
 }
 
-function unAdmittInvitee(invitation: IInvitation){
-  const invitationId = invitation.invitationId
-  const newAddmittedValue = invitation.inviteesAdmitted - 1
-  if (newAddmittedValue > 1) {
-    
-    console.log("yo get outta here")
+function GuardInvitationsTableRow({ invitation, changeAdmitted }: IInvitaionRowData) {
+  const [admitted, setAdmitted] = React.useState(invitation.inviteesAdmitted);
+  const decrease = async () => {
+    var result = await changeAdmitted(invitation, -1);
+    setAdmitted(result);
   }
-  
-}
-
-function renderInvitation(invitation: IInvitation) {
+  const increase = async () => {
+    var result = await changeAdmitted(invitation, 1);
+    setAdmitted(result);
+  }
   return (
     <TableRow
       key={invitation.invitationId}
       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
-     
       <TableCell>name</TableCell>
-      <TableCell>{invitation.inviteesAdmitted}</TableCell>
+      <TableCell>{admitted}</TableCell>
       <TableCell>{invitation.inviteesAmount}</TableCell>
-      <TableCell onClick={() =>admittInvitee(invitation)}>+</TableCell>
+      <TableCell onClick={increase}>+</TableCell>
       <TableCell>{invitation.commentForGuard}</TableCell>
-      <TableCell align="right" onClick={() => unAdmittInvitee(invitation)}>-</TableCell>
+      <TableCell align="right" onClick={decrease}>-</TableCell>
     </TableRow>
   );
 }
