@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { IInvitationWithUserName } from '../../models/invitationWithUserName';
 import { IInvitation } from '../../models/invitation';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,12 +10,12 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 interface IInvitations {
-  invitations: IInvitation[];
+  invitations: IInvitationWithUserName[];
   changeAdmitted(invitation: IInvitation, change: number): Promise<number>;
 }
 
 interface IInvitaionRowData {
-  invitation: IInvitation;
+  invitation: IInvitationWithUserName;
   changeAdmitted(invitation: IInvitation, change: number): Promise<number>;
 }
 
@@ -60,7 +61,7 @@ function GuardInvitationsTableRow({ invitation, changeAdmitted }: IInvitaionRowD
       key={invitation.invitationId}
       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
-      <TableCell>name</TableCell>
+      <TableCell>{invitation.userName}</TableCell>
       <TableCell>{admitted}</TableCell>
       <TableCell>{invitation.inviteesAmount}</TableCell>
       <TableCell onClick={increase}>+</TableCell>

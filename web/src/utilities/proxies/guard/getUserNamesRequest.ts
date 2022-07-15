@@ -1,3 +1,3 @@
 export interface IGetUserNamesRequest {
-    usersIdList?: string[];
+    usersIdList?: Set<string>;
 }
