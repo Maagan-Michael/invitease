@@ -3,7 +3,6 @@ import { GuardInvitationsTable } from '../../components/guard/guardInvitationsTa
 import { IInvitation } from '../../models/invitation';
 import { IInvitationWithUserName } from '../../models/invitationWithUserName';
 import { useApplicationContext } from '../../utilities/applicationContext';
-import { IUserName } from '../../models/userName';
 
 export function ActiveInvitations() {
     const [invitations, setInvitations] = React.useState([] as IInvitationWithUserName[]);
