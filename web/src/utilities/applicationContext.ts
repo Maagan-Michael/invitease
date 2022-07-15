@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { AuthenticationService } from '../services/authenticationService';
 import { InviterProxy } from '../utilities/proxies/inviter/inviterProxy';
-import { GuardProxy } from '../utilities/proxies/guard/guardProxy';
 import { SettingsService } from '../services/settingsService';
+import { IGuardStore } from '../stores/guardStore';
 
 export interface IApplicationContext {
     getAuthenticationService(): AuthenticationService;
     getSettingsService(): SettingsService;
     getInviterProxy(): InviterProxy;
-    getGuardProxy(): GuardProxy;
+    getGuardStore(): IGuardStore;
 }
 
 export const ApplicationContext = React.createContext({} as IApplicationContext);

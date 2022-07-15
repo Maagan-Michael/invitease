@@ -10,6 +10,7 @@ import { InviterInvitations } from './features/inviter/inviterIntitations';
 import { InviterScreen } from './features/inviter/inviterScreen';
 import { GuardScreen } from './features/guard/guardScreen';
 import { GuardProxy } from './utilities/proxies/guard/guardProxy';
+import { GuardStore, IGuardStore } from './stores/guardStore';
 
 
 function App() {
@@ -31,7 +32,7 @@ class AppContext {
   private settingsService: SettingsService | undefined;
   private authenticationService: AuthenticationService | undefined;
   private inviterProxy: InviterProxy | undefined;
-  private guardProxy: GuardProxy | undefined;
+  private guardStore: IGuardStore | undefined;
 
   public getAuthenticationService(): AuthenticationService {
     if (!this.authenticationService) {
@@ -54,10 +55,10 @@ class AppContext {
     return this.inviterProxy;
   }
 
-  public getGuardProxy(): GuardProxy {
-    if (!this.guardProxy) {
-      this.guardProxy = new GuardProxy(this.getSettingsService().getServerUrl(), this.getAuthenticationService());
+  public getGuardStore(): IGuardStore {
+    if (!this.guardStore) {
+      this.guardStore = new GuardStore(new GuardProxy(this.getSettingsService().getServerUrl(), this.getAuthenticationService()));
     }
-    return this.guardProxy;
+    return this.guardStore;
   }
 }
