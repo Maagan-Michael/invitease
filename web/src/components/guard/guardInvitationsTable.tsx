@@ -48,13 +48,13 @@ function renderInvitation({ invitation, changeAdmitted }: IInvitaionRowData) {
 
 function GuardInvitationsTableRow({ invitation, changeAdmitted }: IInvitaionRowData) {
   const [admitted, setAdmitted] = React.useState(invitation.inviteesAdmitted);
-  const decrease = async () => {
-    var result = await changeAdmitted(invitation, -1);
-    setAdmitted(result);
+  const decrease = () => {
+    changeAdmitted(invitation, -1)
+      .then(result => setAdmitted(result));
   }
-  const increase = async () => {
-    var result = await changeAdmitted(invitation, 1);
-    setAdmitted(result);
+  const increase = () => {
+    changeAdmitted(invitation, 1)
+      .then(result => setAdmitted(result));
   }
   return (
     <TableRow

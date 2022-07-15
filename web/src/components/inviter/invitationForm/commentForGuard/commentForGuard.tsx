@@ -1,7 +1,7 @@
 import * as React from "react";
 import { TextField } from "@mui/material";
 
-export function CommentForGuard({ comment: comment, setComment }: ICommentForGaurd) {
+export function CommentForGuard({ comment, setComment }: ICommentForGaurd) {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setComment(event.target.value);
@@ -9,7 +9,6 @@ export function CommentForGuard({ comment: comment, setComment }: ICommentForGau
 
     return (
         <div className="row">
-
             <TextField
                 id="filled-multiline-flexible"
                 label="הערה לשומר"
