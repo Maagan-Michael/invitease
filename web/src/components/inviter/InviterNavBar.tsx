@@ -1,5 +1,6 @@
 import * as React from "react";
 import "../../index.css"
+import { Link } from "react-router-dom";
 import Logo from "../logo";
 
 export function InviterNavBar() {
@@ -10,7 +11,7 @@ export function InviterNavBar() {
                     <Logo />
                 </div>
                 <ul className="nav_items">
-                    <li>הזמנות שלי</li>
+                    <li><Link to="/index">ההזמנות שלי</Link></li>
                     <li>צור קשר</li>
                     <li>עלינו</li>
                 </ul>
