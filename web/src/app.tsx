@@ -6,12 +6,10 @@ import { SettingsService } from './services/settingsService';
 import { AuthenticationService } from './services/authenticationService';
 import { InviterProxy } from './utilities/proxies/inviter/inviterProxy';
 import { ApplicationContext } from './utilities/applicationContext';
-import { InviterInvitations } from './features/inviter/inviterIntitations';
 import { InviterScreen } from './features/inviter/inviterScreen';
 import { GuardScreen } from './features/guard/guardScreen';
 import { GuardProxy } from './utilities/proxies/guard/guardProxy';
 import { GuardStore, IGuardStore } from './stores/guardStore';
-
 
 function App() {
   const context = new AppContext();
@@ -20,9 +18,12 @@ function App() {
       <Routes>
         <Route path='/' element={<Navigate to="/index" />} />
         <Route path="signin-callback" element={<SigninCallback />} />
-        <Route path='index' element={<SecureRoute><GuardScreen /></SecureRoute>} />
+        <Route path='index' element={<SecureRoute><InviterScreen /></SecureRoute>} />
+        <Route path='/guard'>
+          <Route path='invitations' element={<SecureRoute><GuardScreen /></SecureRoute>} />
+        </Route>
       </Routes>
-    </ApplicationContext.Provider>
+    </ApplicationContext.Provider >
   );
 }
 
