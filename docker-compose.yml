@@ -1,7 +1,7 @@
 version: "3.9"
 services:
-  app:
-    hostname: app
+  api:
+    hostname: api
     build: .
     restart: unless-stopped
     volumes:
@@ -12,15 +12,34 @@ services:
       - "db"
       - "keycloak"
     environment:
-       IVT_OPENID_DISCOVERY_URL: 'http://keycloak:8080/auth/realms/master/.well-known/openid-configuration'
-       IVT_OPENID_DISCOVERY_EXTERNAL_URL: 'http://keycloak.localhost/auth/realms/master/.well-known/openid-configuration'
-      #  IVT_ENABLE_AUTH: 'true'
+       IVT_OPENID_DISCOVERY_URL: 'http://keycloak/realms/master/.well-known/openid-configuration'
+       IVT_OPENID_DISCOVERY_EXTERNAL_URL: 'http://keycloak.localhost/realms/master/.well-known/openid-configuration'
+       IVT_ENABLE_AUTH: 'true'
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.invitease.rule=Host(`invitease.localhost`)"
-      - "traefik.http.routers.invitease.entrypoints=web"
-      - "traefik.docker.network=web"
-      - "traefik.http.services.invitease.loadbalancer.server.port=8090"
+      - "traefik.http.routers.api.rule=Host(`api.localhost`)"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.docker.network=invitease_web"
+      - "traefik.http.services.api.loadbalancer.server.port=8090"
+    ports:
+      - "8090:8090"
+      
+  app:
+    hostname: app
+    build: 
+      dockerfile: Dockerfile
+      context: web
+    restart: unless-stopped
+    networks:
+      - web
+    depends_on:
+      - "api"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`app.localhost`)"
+      - "traefik.http.routers.app.entrypoints=web"
+      - "traefik.docker.network=invitease_web"
+      - "traefik.http.services.app.loadbalancer.server.port=80"    
 
   dbmanager:
     image: dpage/pgadmin4
@@ -30,8 +49,12 @@ services:
       - PGADMIN_DEFAULT_EMAIL=invitease@mmm.org.il
       - PGADMIN_DEFAULT_PASSWORD=admin
       - PGADMIN_LISTEN_PORT=8084
+      - PGADMIN_CONFIG_LOGIN_BANNER="MM Admins only!" 
+      - 'PGADMIN_CONFIG_AUTHENTICATION_SOURCES=["internal", "oauth2"]' 
+      - 'PGADMIN_CONFIG_OAUTH2_CONFIG=[{"OAUTH2_NAME": "keycloak","OAUTH2_DISPLAY_NAME": "Keycloak","OAUTH2_CLIENT_ID": "invitease","OAUTH2_CLIENT_SECRET": "d0b8122f-8dfb-46b7-b68a-f5cc4e25d000","OAUTH2_TOKEN_URL": "http://keycloak.localhost/realms/master/protocol/openid-connect/token","OAUTH2_AUTHORIZATION_URL": "http://keycloak.localhost/realms/master/protocol/openid-connect/auth","OAUTH2_API_BASE_URL": "http://keycloak.localhost/admin/realms","OAUTH2_USERINFO_ENDPOINT": "userinfo","OAUTH2_SCOPE": "openid email profile","OAUTH2_ICON": "fa-solid fa-pied-piper","OAUTH2_BUTTON_COLOR": "#3253a8","ALLOWED_ORGANIZATIONS": [""]}]'
     volumes:
       - ./init/db/servers.json:/pgadmin4/servers.json
+      - ./init/db/pgpass:/pgadmin4/pgpass
     depends_on:
       - db
     networks:
@@ -40,7 +63,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.dbadmin.rule=Host(`dbadmin.localhost`)"
       - "traefik.http.routers.dbadmin.entrypoints=web"
-      - "traefik.docker.network=web"
+      - "traefik.docker.network=invitease_web"
       - "traefik.http.services.dbadmin.loadbalancer.server.port=8084"
 
   db:
@@ -58,17 +81,27 @@ services:
     volumes:
       - ./init/db/baseline.sql:/docker-entrypoint-initdb.d/baseline.sql
       - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U invitease -d invitease"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   keycloak:
-    image: jboss/keycloak:latest
     hostname: keycloak
     restart: unless-stopped
     networks:
-      - web
+      web:
+        aliases:
+          - "keycloak.localhost"
     depends_on:
       - db
-    volumes:
-      - ./init/keycloak:/opt/jboss/startup-scripts
+    build: 
+      dockerfile: Dockerfile
+      context: keycloak
+    ports:
+      - "8081:80"
+      - "8082:8443"
     environment:
       - DB_VENDOR=POSTGRES
       - DB_ADDR=db
@@ -77,26 +110,48 @@ services:
       - DB_USER=invitease
       - DB_SCHEMA=public
       - DB_PASSWORD=password
-      - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=admin
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.keycloak.rule=Host(`keycloak.localhost`)"
       - "traefik.http.routers.keycloak.entrypoints=web"
+      - "traefik.http.routers.keycloak.service=keycloak"
       - "traefik.docker.network=web"
-      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=80"
+      #- "traefik.http.routers.keycloak.middlewares=keycloaks"
+      #- "traefik.http.middlewares.keycloaks.redirectscheme.scheme=https"
+      #- "traefik.http.middlewares.keycloaks.redirectscheme.permanent=true"
+      # SSL-Section
+      - "traefik.http.routers.keycloaks.rule=Host(`keycloak.localhost`)"
+      - "traefik.http.routers.keycloaks.entrypoints=web-secure"
+      - "traefik.http.routers.keycloaks.service=keycloaks"
+      - "traefik.http.routers.keycloaks.tls=true"
+      - "traefik.http.services.keycloaks.loadbalancer.server.port=80"
+      - "traefik.http.services.keycloaks.loadbalancer.passhostheader=true"
+    healthcheck:
+      interval: 30s
+      timeout: 3s
+      start_period: 10s
+      retries: 3
+      test: curl -k --fail http://localhost/ || exit 1
 
 
   traefik:
-    image: traefik:v2.5.4
+    image: traefik:v2.6.6
     command:
       - "--log.level=DEBUG"
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--entryPoints.web-secure.address=:443"
+      - "--global.sendAnonymousUsage=false"
+      - "--serverstransport.insecureskipverify=true"
+      - "--providers.docker.network=invitease_web"
     depends_on:
       - "app"
+      - "dbmanager"
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -105,10 +160,17 @@ services:
       - "traefik.http.routers.dashboard.service=api@internal"
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - web
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      interval: 10s
+      timeout: 1s
+      start_period: 10s
+      retries: 3
+      test: wget --quiet --tries=1 --spider http://localhost:8080 || exit 1
 
 networks:
   web:
