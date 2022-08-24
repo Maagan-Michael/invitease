@@ -1,5 +1,7 @@
 import { Log, User, UserManager } from 'oidc-client-ts';
 import { AuthenticationSettings } from '../settings/AuthenticationSettings';
+import { JsonHelper } from '../utilities/jsonHelper';
+import { Roles } from '../utilities/roles';
 
 export class AuthenticationService {
     public userManager: UserManager;
@@ -36,5 +38,14 @@ export class AuthenticationService {
 
     public handleSignin(): Promise<User> {
         return this.userManager.signinRedirectCallback();
+    }
+
+    public async getUserRoles(): Promise<string[]> {
+        var user = await this.getUser();
+        const claims = JsonHelper.parseJwt(user.access_token);
+        console.log("Claims", claims);
+        const allowedRoles = [Roles.admin, Roles.guard, Roles.user]
+        const roles = (claims.roles as string[]).filter(r => allowedRoles.includes(r));
+        return roles;
     }
 }
