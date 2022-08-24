@@ -1,10 +1,10 @@
 import * as React from "react";
-import { GuardNavBar } from "../../components/guard/guardNavBar";
+import { NavBar } from "../../components/navBar";
 import { ActiveInvitations } from "./activeInvitations";
 export function GuardScreen(){
     return (
         <div className="basic_div">
-            <GuardNavBar />
+            <NavBar />
             <header className="background" >
             </header>
             <ActiveInvitations />
