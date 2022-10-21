@@ -30,7 +30,7 @@ WORKDIR /app/
 COPY . /app/
 RUN flutter build web
 
-FROM nginx:alpine
+FROM nginx:1.23.2-alpine
 
 COPY --from=builder /app/build/web/* /usr/share/nginx/html/
 
