@@ -11,7 +11,7 @@ ADD package.json tsconfig.json /source/
 RUN npm install \
   && npm run build
 
-FROM nginx:1.22.0-alpine
+FROM nginx:1.23.2-alpine
 
 ADD nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /source/build /var/www/
