@@ -27,6 +27,11 @@ class AuthenticationConfiguration:
         return os.environ.get('IVT_OPENID_DISCOVERY_EXTERNAL_URL', self.openid_url)
 
 
+class UserInformation:
+    def __init__(self, value: dict) -> None:
+        self.__dict__.update(value)
+
+
 configuration = None
 
 
@@ -71,14 +76,14 @@ def openapi_override(app):
 
 
 async def decode_token(request: Request, call_next):
-    if request.url.path.startswith(configuration.allowed_paths):
+    if request.url.path.startswith(configuration.allowed_paths) or request.method == 'OPTIONS':
         return await call_next(request)
     response = None
     if request.state.token is not None:
         user_response = requests.request(method='GET', url=configuration.userinfo_endpoint,
                                          headers={"Authorization": f"Bearer {request.state.token}"})
         if user_response.status_code == 200:
-            request.state.user = user_response.json()
+            request.state.user = UserInformation(user_response.json())
             response = await call_next(request)
 
     if response is None:
@@ -87,7 +92,7 @@ async def decode_token(request: Request, call_next):
 
 
 async def extract_token(request: Request, call_next):
-    if request.url.path.startswith(configuration.allowed_paths):
+    if request.url.path.startswith(configuration.allowed_paths) or request.method == 'OPTIONS':
         return await call_next(request)
     response = None
     authorization_header = request.headers.get('Authorization')
@@ -138,13 +143,13 @@ def require_roles(roles: list):
         from functools import wraps
 
         async def wrapper(request: Request, *args,  **kwargs):
-            if any(x in roles for x in request.state.user['roles']):
+            if any(x in roles for x in request.state.user.roles):
                 if inspect.iscoroutinefunction(handler):
                     result = await handler(*args, **kwargs)
                 else:
                     result = handler(*args, **kwargs)
                 return result
-            return Response(status_code=401)
+            return Response(status_code=403)
         SignatureFixer().fix_signature(wrapper, handler)
         return wrapper
     return require_roles_decorator

@@ -1,0 +1,62 @@
+
+
+
+.form-box{
+    min-width: 80%;
+    /* height: 40vh; */
+    margin: 0vw;
+    padding: 5vh ;
+    position:relative; 
+    align-items: center;
+    /* position:relative for .prevBtn and .nextBtn position:absolute; */
+}
+
+.form-box label{
+    display: block;
+    text-align: right;
+    font-size: 20px;
+    margin: 0 0 2vh 0;
+}
+
+.form-box input, textarea{
+    display: block;
+    width: 80%;
+    padding: .5rem .8rem .5rem .8rem;
+    margin: .9vw 0 ;
+    border:0;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+.form-box textarea{
+    height: 15vh;
+}
+
+.submitButton{
+    display: inline-block;
+    width: 30%;
+    height: 2rem;
+    color: purple;
+    border: 0;
+    bottom: -6vh;
+    left: 15vw;
+    cursor: pointer;
+    font-size: 20px;
+    position:absolute;
+    margin: 1rem 0 1rem 80rem;
+    border-radius: 0 20px 20px 0; 
+
+}
+
+
+
+.submitButton:hover{
+    background-color: rgb(245, 245, 78);
+    transition: 1s background ease;
+}
+
+
+.submitButton{    
+    margin: 1rem 0 1rem 0; 
+    display: outside;   
+} 
